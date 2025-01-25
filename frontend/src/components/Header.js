@@ -13,7 +13,7 @@ const Header = () => {
   return (
     <header>
       <div className="logo">
-  <a href="/" className="logo-link">AICEDEMY</a>
+  <a href="/" className="logo-link">AICADEMY</a>
      </div>
       <nav className={menuOpen ? 'open' : ''}>
         <Link to="/">Home</Link>
