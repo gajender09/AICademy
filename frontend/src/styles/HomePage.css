@@ -1,0 +1,243 @@
+/* src/styles/HomePage.css */
+.home-page {
+    background: #033264; /* Hero background color */
+    color: white;
+    text-align: center;
+    padding: 60px 20px;
+  }
+  
+  .hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .home-page h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+  }
+  
+  .home-page p {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+  }
+  
+  .home-page a {
+    padding: 15px 30px;
+    background-color: #28a745;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    display: inline-block;
+    transition: background-color 0.3s;
+  }
+  
+  .home-page a:hover {
+    background-color: #218838;
+  }
+  
+  .features-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .feature-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .feature-card p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  .footer p {
+    font-size: 0.9rem;
+  }
+ 
+  .testimonial-section {
+    background-color: #f8f9fa;
+    padding: 40px;
+    text-align: center;
+  }
+  
+  .testimonial-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+  
+  .testimonial-card {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .testimonial-card p {
+    font-style: italic;
+    font-size: 1.1rem;
+  }
+  .video-section {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .video-section iframe {
+    border-radius: 10px;
+  }
+  .how-it-works {
+    background-color: #f8f9fa;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .how-it-works .step {
+    display: inline-block;
+    width: 30%;
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .how-it-works .step-icon {
+    background-color: #28a745;
+    color: white;
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+  }
+  
+  .how-it-works p {
+    font-size: 1.1rem;
+    margin-top: 10px;
+  }
+
+  .faq {
+    padding: 40px 20px;
+    background-color: #f4f4f9;
+  }
+  
+  .faq h3 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+  }
+  
+  .faq-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  
+  .faq-item p {
+    font-size: 1rem;
+    color: #555;
+  }
+
+  .cta-banner {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+  }
+  
+  .cta-banner a {
+    color: white;
+    text-decoration: underline;
+    font-weight: bold;
+  }
+  
+  .cta-banner p {
+    margin: 0;
+  }
+  
+
+@media (max-width: 768px) {
+    .home-page h1 {
+      font-size: 2.2rem;
+    }
+  
+    .home-page p {
+      font-size: 1rem;
+    }
+  
+    .home-page a {
+      font-size: 1rem;
+      padding: 12px 25px;
+    }
+  
+    .features-section {
+      grid-template-columns: 1fr;
+      padding: 20px;
+    }
+  
+    .feature-card {
+      padding: 15px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .home-page h1 {
+      font-size: 1.8rem;
+    }
+  
+    .home-page p {
+      font-size: 0.9rem;
+    }
+  
+    .home-page a {
+      font-size: 1rem;
+      padding: 10px 20px;
+    }
+  
+    .features-section {
+      grid-template-columns: 1fr;
+      padding: 15px;
+    }
+  
+    .feature-card {
+      padding: 10px;
+    }
+  
+    .footer p {
+      font-size: 0.8rem;
+    }
+  }
+  

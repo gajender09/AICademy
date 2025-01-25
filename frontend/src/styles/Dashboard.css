@@ -1,0 +1,189 @@
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    background-color: #f8f9fa;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    width: 250px;
+    background-color: #343a40;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .sidebar .logo {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .sidebar-nav {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .sidebar-nav li {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .sidebar-nav li:hover {
+    background-color: #495057;
+  }
+  /* Profile photo styling */
+/* Sidebar profile section */
+.profile-info {
+    display: flex; /* Align items horizontally */
+    align-items: center; /* Vertically center the items */
+    margin-bottom: 20px; /* Add some spacing below the profile */
+  }
+  
+  /* Profile photo styling */
+  .profile-photo {
+    width: 50px;    /* Set desired width */
+    height: 50px;   /* Set desired height */
+    border-radius: 50%;  /* Make it circular */
+    margin-right: 10px;  /* Space between image and username */
+  }
+  
+  /* Username styling */
+  .username {
+    font-size: 18px;  /* Adjust font size as needed */
+    font-weight: bold;  /* Make username bold */
+  }
+  
+  
+  /* Main Content */
+  .main-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .dashboard-heading {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .courses-section,
+  .recommendations-section,
+  .activity-section {
+    margin-bottom: 40px;
+  }
+  
+  /* Course Cards */
+  .courses-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+  }
+  
+  .course-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    text-align: center;
+    transition: transform 0.3s ease;
+  }
+  
+  .course-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .course-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .progress-bar-container {
+    background-color: #e9ecef;
+    height: 10px;
+    border-radius: 5px;
+    margin: 10px 0;
+    overflow: hidden;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    background-color: #28a745;
+  }
+  
+  .progress-text {
+    font-size: 14px;
+    color: gray;
+  }
+  
+  /* Recommendation Cards */
+  .recommendations-list {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .recommendation-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .recommendation-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .recommendation-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 10px;
+  }
+  .quiz-demo {
+    background-color: #f4f4f9;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  .quiz-demo .quiz-btn {
+    padding: 12px 25px;
+    background-color: #28a745;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    text-decoration: none;
+  }
+  
+  .quiz-demo .quiz-btn:hover {
+    background-color: #218838;
+  }
+  
+
+  /* Activity List */
+  .activity-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .activity-list li {
+    background-color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
