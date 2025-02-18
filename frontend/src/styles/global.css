@@ -1,75 +1,168 @@
 html, body {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-x: hidden; 
   width: 100%;
 }
 
 * {
-  box-sizing: border-box; /* Prevent unintended size issues */
+  box-sizing: border-box; 
 }
-/* Make the logo clickable */
-.logo-link {
+
+/* 🌟 Logo Styling */
+.logo-text {
   text-decoration: none;
-  color: #333; /* Set the color to match your design */
-  font-size: 24px; /* Adjust font size */
+  color: #033264;
+  font-size: 28px;
   font-weight: bold;
+  font-family: var(--fontHead);
+  letter-spacing: 1px;
+  transition: all 0.3s ease-in-out;
+  position: relative;
 }
 
-.logo-link:hover {
-  color: #007bff; /* Change color on hover */
+.logo-text::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background-color: rgb(20, 147, 138);
+  transition: width 0.3s ease-in-out;
+}
+
+.logo-text:hover {
+  color: rgb(20, 147, 138);
   cursor: pointer;
+  transform: scale(1.1);
 }
 
-header {
-  background-color: #28a745;
-  color: white;
-  padding: 15px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  position: -webkit-sticky; /* Safari support */
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+.logo-text:hover::after {
   width: 100%;
 }
 
-header .logo {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin-right: 20px; /* Custom space between logo and navbar */
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
 }
 
+.logo-image {
+  width: 35px;
+  height: auto;
+  margin-right: 10px;
+}
+
+.logo-link:hover {
+  opacity: 0.9;
+}
+
+/* 🌟 Header Styling */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #f5f5f5;
+  color: white;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 🌟 Navbar */
 header nav {
   display: flex;
+  align-items: center;
   gap: 20px;
 }
- 
+
 header nav a {
-    color: rgb(4, 78, 8);
-    font-size: 1rem;
-    transition: color 0.3s;
-  }
-  
-  header nav a:hover {
-    color: white;
-  }
-  
-  .hamburger-menu {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-  }
-  
-  .hamburger-menu div {
-    width: 25px;
-    height: 3px;
-    background-color: white;
-    border-radius: 3px;
-  }
+  color: #033264;
+  font-size: 1rem;
+ 
+  font-weight: 550;
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+  padding: 8px 12px;
+}
+
+header nav a:hover {
+  color: rgb(140, 131, 247);
+  background: rgba(140, 131, 247, 0.1);
+  border-radius: 5px;
+}
+
+/* 🌟 Profile Section */
+.profile-section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-icon {
+  font-size: 1.8rem;
+  color: #033264;
+  transition: transform 0.3s ease-in-out;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+/* 🌟 Profile Dropdown Menu */
+.profile-dropdown {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  background: white;
+  color: black;
+  width: 160px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  z-index: 1000;
+}
+
+.profile-dropdown a,
+.profile-dropdown button {
+  text-decoration: none;
+  padding: 10px;
+  color: black;
+  font-size: 1rem;
+  font-weight: 500;
+  background: none;
+  border: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+}
+
+.profile-dropdown button:hover,
+.profile-dropdown a:hover {
+  background: #f2f2f2;
+  border-radius: 5px;
+}
+
+/* 🌟 Hamburger Menu (Mobile View) */
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.hamburger-menu div {
+  width: 25px;
+  height: 3px;
+  background-color: #033264;
+  border-radius: 3px;
+  transition: all 0.3s ease-in-out;
+}
+
+
   /* Global Reset */
 body {
   margin: 0;
@@ -171,7 +264,7 @@ a {
 }
 
 /* Courses Page Container */
-.courses-container {
+/* .courses-container {
   padding: 20px;
 }
 
@@ -182,7 +275,7 @@ a {
   color: #333;
 }
 
-/* Grid Layout for Cards */
+
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -190,59 +283,57 @@ a {
   padding: 10px;
 }
 
-/* Course Card */
-/* Enhanced Course Card */
+
 .course-card {
-  background: linear-gradient(135deg, #28a745, #073b13); /* Gradient Background */
-  border-radius: 15px; /* Rounded Corners */
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* Soft Shadow */
+  background: linear-gradient(135deg, #28a745, #073b13); 
+  border-radius: 15px; 
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); 
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: white; /* Text color for better contrast */
+  color: white; 
 }
 
 .course-card:hover {
   transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
 }
 
-/* Course Image */
+
 .course-image {
   width: 100%;
   height: 200px;
-  object-fit: cover; /* Ensures images fill the space without distortion */
+  object-fit: cover; 
   border-bottom: 5px solid rgba(255, 255, 255, 0.2);
 }
 
 
-/* Course Content */
+
 .course-content {
   padding: 20px;
   text-align: center;
 }
 
-/* Course Title */
 .course-title {
   font-size: 1.8rem;
   font-weight: bold;
   margin: 10px 0;
 }
 
-/* Course Description */
+
 .course-description {
   font-size: 1rem;
   margin-bottom: 20px;
 }
 
-/* Enroll Button */
+
 .enroll-button {
-  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent button */
+  background-color: rgba(255, 255, 255, 0.8); 
   color: #28a745;
   padding: 12px 25px;
   border: none;
-  border-radius: 25px; /* Rounded Button */
+  border-radius: 25px; 
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -250,29 +341,71 @@ a {
 
 .enroll-button:hover {
   background-color: white;
-  transform: scale(1.1); /* Slight zoom effect */
+  transform: scale(1.1); 
+} */
+
+.container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+}
+
+.text-3xl {
+  font-size: 2rem;
+}
+
+.font-bold {
+  font-weight: bold;
+}
+
+.list-disc {
+  list-style-type: disc;
+}
+
+.pl-5 {
+  padding-left: 1.25rem;
+}
+
+.text-blue-500 {
+  color: #007bff;
+}
+
+.text-red-500 {
+  color: #ff0000;
 }
 
 
-@media (max-width: 768px) {
-    header nav {
-      display: none;
-      position: absolute;
-      top: 60px;
-      right: 20px;
-      background-color: #ffffff;
-      padding: 10px;
-      border-radius: 5px;
-      flex-direction: column;
-      gap: 10px;
-    }
-  
-    header nav.open {
-      display: flex;
-    }
-  
-    .hamburger-menu {
-      display: flex;
-    }
+/* 🌟 Responsive Navbar */
+@media screen and (max-width: 768px) {
+  .hamburger-menu {
+    display: flex;
   }
+
+  header nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: #fff;
+    width: 200px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+
+  header nav.open {
+    display: flex;
+  }
+
+  header nav a {
+    padding: 10px;
+    text-align: center;
+    width: 100%;
+  }
+}
   

@@ -2,30 +2,32 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const router = require("./routes/userRoutes");
+const userRoutes = require("./routes/userRoutes");
+const courseRoutes = require("./routes/courseRoutes");
 
 dotenv.config();
 const app = express();
-const allowedOrigins = [
-    "http://localhost:3000",
-];
 
+const allowedOrigins = ["http://localhost:3000"];
 
-app.use(express.json()); // Move this BEFORE routes
+app.use(express.json());
 app.use(
-    cors({
-        origin: allowedOrigins,
-        credentials: true,
-    })
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  })
 );
-app.use('/', router);
 
+
+// Routes
+app.use("/", userRoutes);
+app.use("/api", courseRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log("MongoDB Connected"))
-    .catch((err) => console.error("MongoDB Connection Error:", err));
+  .then(() => console.log("MongoDB Connected"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

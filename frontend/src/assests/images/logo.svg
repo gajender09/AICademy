@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<svg version="1.1" id="Layer_1" xmlns:x="&amp;ns_extend;" xmlns:i="&amp;ns_ai;" xmlns:graph="&amp;ns_graphs;" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 315 306.615295" style="enable-background:new 0 0 315 306.615295;" xml:space="preserve">
+      <style type="text/css">.st0{fill:#00D9C3;}	.st1{fill:#1D45D7;}</style>
+    <metadata>
+              <sfw>
+                      <slices/>
+            <sliceSourceBounds bottomLeftOrigin="true" height="306.615295" width="315" x="0" y="0"/>
+                  </sfw>
+          </metadata>
+    <g id="color_index_1" fill="#00d9c3">
+              <polygon points="170.482132,66.771461 157.657135,99.516495 0.000019,37.768108 0.000019,0.000016 &#x9;"/>
+        <polygon points="163.661163,271.200745 157.893311,306.615295 0.000019,246.949356 0.000019,209.35524 &#x9;"/>
+        <polygon points="279.833008,245.643646 315,245.643646 315,0.000016 278.924469,14.129444 279.833008,51.541687 &#x9;"/>
+          </g>
+    <g id="color_index_0" fill="#1d45d7">
+              <polygon points="35.167034,13.773602 0,0 0,209.355209 35.167034,222.644409 &#x9;"/>
+        <polygon points="157.76532,61.790771 157.657166,99.516479 279.833008,51.541687 279.833008,13.773621 &#x9;"/>
+        <polygon points="157.549011,268.891022 157.893311,306.615295 315,246.949356 315,209.35524 &#x9;"/>
+          </g>
+  </svg>

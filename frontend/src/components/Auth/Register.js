@@ -26,9 +26,9 @@ const Register = () => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-
+  
     const { fullName, email, password, confirmPassword } = formData;
-
+  
     if (!fullName || !email || !password || !confirmPassword) {
       setErrorMessage("All fields are required.");
       return;
@@ -37,7 +37,10 @@ const Register = () => {
       setErrorMessage("Passwords do not match.");
       return;
     }
-
+  
+    // Extract first name (split at first space)
+    const firstName = fullName.split(" ")[0];  
+  
     try {
       const response = await fetch("http://localhost:3001/register", {
         method: 'POST',
@@ -46,16 +49,16 @@ const Register = () => {
         },
         credentials: 'include',
         body: JSON.stringify({
-          name: fullName,
+          name: firstName, // Send only the first name
           email: email,
           password: password
         })
       });
-
+  
       const data = await response.json();
       console.log("Response", data);
       if (response.ok) {
-        setSuccessMessage("Registration successful! Please login.");
+        setSuccessMessage(`Registration successful! Welcome, ${firstName}.`);
         setFormData({
           fullName: "",
           email: "",
@@ -69,6 +72,7 @@ const Register = () => {
       setErrorMessage("Something went wrong. Please try again.");
     }
   };
+  
 
   return (
     <div className="auth-container">
