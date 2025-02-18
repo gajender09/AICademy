@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { FaUserCircle } from 'react-icons/fa'; // Profile icon
 import '../styles/global.css';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userName, setUserName] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   useEffect(() => {
-    // Check for user in localStorage
+    // Check if user is registered
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       try {
@@ -23,27 +25,44 @@ const Header = () => {
     setMenuOpen(!menuOpen);
   };
 
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('user');
     setUserName(null);
+    setShowDropdown(false);
     window.location.href = '/';
   };
 
   return (
     <header>
       <div className="logo">
-        <a href="/" className="logo-link">AICADEMY</a>
+        <Link to="/" className="logo-link">
+          <img src={require('../assests/images/logo.png')} alt="AICADEMY Logo" className="logo-image" />
+          <span className="logo-text">AICADEMY</span>
+        </Link>
       </div>
+
       <nav className={menuOpen ? 'open' : ''}>
         <Link to="/">Home</Link>
         <Link to="/courses">Courses</Link>
-        <Link to="/dashboard">Dashboard</Link>
 
+        {/* Show Dashboard only if user is logged in */}
+        {userName && <Link to="/dashboard">Dashboard</Link>}
+
+        {/* Show Profile Icon instead of Welcome, Username */}
         {userName ? (
-          <>
-            <span>Welcome, {userName}</span>
-            <button onClick={handleLogout}>Logout</button>
-          </>
+          <div className="profile-section" onClick={toggleDropdown}>
+            <FaUserCircle className="profile-icon" />
+            {showDropdown && (
+              <div className="profile-dropdown">
+                <Link to="/profile">Profile</Link>
+                <button onClick={handleLogout}>Logout</button>
+              </div>
+            )}
+          </div>
         ) : (
           <>
             <Link to="/login">Login</Link>
@@ -51,6 +70,7 @@ const Header = () => {
           </>
         )}
       </nav>
+
       <div className="hamburger-menu" onClick={toggleMenu}>
         <div></div>
         <div></div>
