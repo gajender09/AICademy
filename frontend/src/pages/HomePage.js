@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import ReactPlayer from 'react-player';
-import Slider from 'react-slick';
-import { FaBookOpen, FaChalkboardTeacher, FaUsers } from 'react-icons/fa';
+import { FaBookOpen, FaChalkboardTeacher, FaUsers, FaProjectDiagram, FaBook, FaLink, FaBrain } from "react-icons/fa";
 import { motion } from 'framer-motion';
-import 'slick-carousel/slick/slick.css'; 
+import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import '../styles/HomePage.css';
 
@@ -21,16 +20,6 @@ const HomePage = () => {
 
   const toggleFAQ = (index) => {
     setExpandedFAQ(expandedFAQ === index ? null : index);
-  };
-
-  const testimonialSettings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
   };
 
   return (
@@ -50,52 +39,88 @@ const HomePage = () => {
       </motion.section>
 
       {/* Features Section with Icons */}
-      <section className="features-section">
-        <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
-          <FaBookOpen size={40} />
-          <h3>Personalized Courses</h3>
-          <p>Get course recommendations based on your skills and preferences.</p>
-        </motion.div>
-        <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
-          <FaChalkboardTeacher size={40} />
-          <h3>Expert Instructors</h3>
-          <p>Learn from industry experts who will guide you every step of the way.</p>
-        </motion.div>
-        <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
-          <FaUsers size={40} />
-          <h3>Interactive Learning</h3>
-          <p>Engage with interactive content and quizzes to test your knowledge.</p>
-        </motion.div>
-      </section>
-
-      {/* Testimonial Carousel */}
-      <section className="testimonial-section">
-        <h2>What Our Users Say</h2>
-        <Slider {...testimonialSettings}>
-          <div className="testimonial-card">
-            <p>"AICademy transformed the way I learn!"</p>
-            <p>- Student Name</p>
-          </div>
-          <div className="testimonial-card">
-            <p>"Great personalized learning experience!"</p>
-            <p>- Instructor Name</p>
-          </div>
-        </Slider>
-      </section>
+      <div className="features-container">
+        <h2 className="features-header">Unlock Your Potential with AICademy</h2>
+        <section className="features-section">
+          {/* Feature Cards Here */}
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaBookOpen size={40} />
+            <h3>Personalized Courses</h3>
+            <p>Get course recommendations based on your skills and preferences.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaChalkboardTeacher size={40} />
+            <h3>Expert Instructors</h3>
+            <p>Learn from industry experts who will guide you every step of the way.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaUsers size={40} />
+            <h3>Interactive Learning</h3>
+            <p>Engage with interactive content and quizzes to test your knowledge.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaProjectDiagram size={40} />
+            <h3>AI Roadmap</h3>
+            <p>Generate an AI-powered learning roadmap tailored to your goals.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaBook size={40} />
+            <h3>Glossary</h3>
+            <p>Access a comprehensive glossary of key terms and concepts.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaLink size={40} />
+            <h3>Resources</h3>
+            <p>Get curated learning materials, articles, and recommended books.</p>
+          </motion.div>
+          <motion.div className="feature-card" whileHover={{ scale: 1.05 }}>
+            <FaBrain size={40} />
+            <h3>AI-Curated Content</h3>
+            <p>Receive AI-curated learning content to enhance your knowledge.</p>
+          </motion.div>
+        </section>
+      </div>
 
       {/* Video Section */}
       <section className="video-section">
         <h2>Learn More About AICademy</h2>
-        <ReactPlayer url="https://www.youtube.com/watch?v=your-video-id" width="100%" height="400px" controls />
+        <ReactPlayer url="https://www.youtube.com/watch?v=your-video-id" width="800px" height="400px" controls />
       </section>
 
       {/* How It Works */}
       <section className="how-it-works">
         <h2>How It Works</h2>
-        <div className="step"><div className="step-icon">1</div><p>Sign Up</p></div>
-        <div className="step"><div className="step-icon">2</div><p>Get Personalized Courses</p></div>
-        <div className="step"><div className="step-icon">3</div><p>Start Learning</p></div>
+        <p className="sub-heading">
+          Learn smarter with our AI-powered personalized learning journey!
+        </p>
+
+        <div className="steps-container">
+          <div className="step">
+            <div className="step-icon"><i className="fas fa-user-plus"></i></div>
+            <h3>Sign Up</h3>
+            <p>Create your account and set your learning preferences.</p>
+          </div>
+
+          <div className="step">
+            <div className="step-icon"><i className="fas fa-graduation-cap"></i></div>
+            <h3>Get Personalized Courses</h3>
+            <p>AI curates a roadmap based on your skills and interests.</p>
+          </div>
+
+          <div className="step">
+            <div className="step-icon"><i className="fas fa-book-open"></i></div>
+            <h3>Start Learning</h3>
+            <p>Watch videos, read content, and track progress interactively.</p>
+          </div>
+
+          <div className="step">
+            <div className="step-icon"><i className="fas fa-trophy"></i></div>
+            <h3>Earn Achievements</h3>
+            <p>Complete courses, earn badges, and get certified.</p>
+          </div>
+        </div>
       </section>
+
 
       {/* FAQ Section */}
       <section className="faq">
@@ -110,23 +135,6 @@ const HomePage = () => {
         ))}
       </section>
 
-      {/* Interactive Career Roadmaps
-      <section className="career-roadmaps">
-        <h2>Career Roadmaps</h2>
-        <div className="roadmap-container">
-          <div className="roadmap-card">
-            <h3>AI & Machine Learning</h3>
-            <p>Follow a structured path to master AI and ML.</p>
-            <Link to="/ai-roadmap">View Roadmap</Link>
-          </div>
-          <div className="roadmap-card">
-            <h3>Full-Stack Development</h3>
-            <p>Master frontend and backend development step by step.</p>
-            <Link to="/fullstack-roadmap">View Roadmap</Link>
-          </div>
-        </div>
-      </section> */}
-
       {/* CTA Section */}
       {!isLoggedIn && (
         <div className="cta-banner">
@@ -134,10 +142,6 @@ const HomePage = () => {
         </div>
       )}
 
-      {/* Footer */}
-      <footer className="footer">
-        <p>&copy; 2025 AI Learning Platform. All rights reserved.</p>
-      </footer>
     </div>
   );
 };
