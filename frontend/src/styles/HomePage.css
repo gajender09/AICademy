@@ -1,9 +1,13 @@
-
 .home-page {
-    background: linear-gradient(99.03deg, #252f8a 4.3%, #13425B 104.25%); 
+    background: linear-gradient(99.03deg, #252f8a 4.3%, #13425B 104.25%);
     color: white;
     text-align: center;
     padding: 60px 20px;
+    border-radius: 20px;
+    margin: 5px;
+    box-shadow: 0 10px 30px rgb(73, 107, 201);
+
+    
   }
   
   .hero-content {
@@ -34,38 +38,105 @@
   .home-page a:hover {
     background-color: #218838;
   }
-  
-  .features-section {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-    padding: 40px 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-  
-  .feature-card {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  .features-container {
+    background: linear-gradient(135deg, #f8f9fa 30%, #dbeafe); /* Unified Background */
+}
+  .features-header {
+    font-size: 70px;
+    font-weight: bold;
+    background: linear-gradient(135deg, #007bff, #4a2d78);
+    -webkit-background-clip: text;
+    background-clip: text;
     text-align: center;
-    transition: transform 0.3s ease;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 2px;
+    margin-bottom: 20px;
   }
-  
-  .feature-card:hover {
-    transform: translateY(-10px);
+  .features-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px;
+    padding: 30px 20px;
+    background: transparent; /* Background removed as it's applied to .features-container */
+    border-radius: 12px;
   }
-  
-  .feature-card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-  }
-  
-  .feature-card p {
-    font-size: 1rem;
-    color: #666;
-  }
+/* Feature Cards */
+.feature-card {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    width: 260px;  /* Fixed width */
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    border: 2px solid transparent;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Subtle Border Animation */
+/* .feature-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    border-radius: inherit;
+    border: 2px solid transparent;
+    background: linear-gradient(120deg, transparent 30%, #6610f2 50%, transparent 70%);
+    background-size: 300% 100%;
+    transition: background-position 0.5s ease-in-out;
+    z-index: -1;
+} */
+
+.feature-card:hover::before {
+    background-position: 100% 0;
+}
+
+/* Hover Effect */
+.feature-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(144, 115, 190, 0.2);
+    border-color: #7552af;
+}
+
+/* Icons */
+.feature-card svg {
+    color: #007bff;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature-card:hover svg {
+    color: #6610f2;
+    transform: rotate(10deg);
+}
+
+/* Headings */
+.feature-card h3 {
+    font-size: 1.7rem;
+    color: #222;
+    font-weight: 700;
+    margin-top: 12px;
+    transition: color 0.5s ease-in-out;
+}
+
+.feature-card:hover h3 {
+    color: #6610f2;
+}
+
+/* Description Text */
+.feature-card p {
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 8px;
+    line-height: 1.5;
+    font-weight: 500;
+}
+
+
   
   .footer {
     background-color: #333;
@@ -81,67 +152,116 @@
     font-size: 0.9rem;
   }
  
-  .testimonial-section {
-    background-color: #f8f9fa;
-    padding: 40px;
-    text-align: center;
-  }
-  
-  .testimonial-cards {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-  }
-  
-  .testimonial-card {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .testimonial-card p {
-    font-style: italic;
-    font-size: 1.1rem;
-  }
   .video-section {
-    padding: 40px 20px;
-    text-align: center;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 50vh;
   }
+
+  .video-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    text-align: center;
+}
+
   
   .video-section iframe {
     border-radius: 10px;
   }
-  .how-it-works {
-    background-color: #f8f9fa;
-    padding: 40px 20px;
-    text-align: center;
-  }
   
-  .how-it-works .step {
-    display: inline-block;
-    width: 30%;
+.how-it-works {
     text-align: center;
-    margin: 20px;
-  }
-  
-  .how-it-works .step-icon {
-    background-color: #28a745;
-    color: white;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, #f8f9fa 30%, #e3f2fd);
+    border-radius: 10px;
+}
+
+.how-it-works h2 {
     font-size: 2rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    font-weight: bold;
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.sub-heading {
+    font-size: 1.3rem;
+    color: #444;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.steps-container {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
     justify-content: center;
-    margin: 0 auto;
-  }
-  
-  .how-it-works p {
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.step {
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 25px;
+    max-width: 260px;
+    text-align: center;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.step:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+}
+
+.step-icon {
+    font-size: 3rem;
+    background: linear-gradient(135deg, #007bff, #6610f2);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 12px;
+}
+
+.step h3 {
+    font-size: 1.6rem;
+    color: #222;
+    font-weight: 600;
+}
+
+.step p {
     font-size: 1.1rem;
-    margin-top: 10px;
-  }
+    color: #666;
+}
+
+/* Modern Floating Effect */
+.step::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    bottom: 0;
+    left: 0;
+    background: linear-gradient(90deg, #007bff, #6610f2);
+    transition: height 0.3s ease-in-out;
+}
+
+.step:hover::before {
+    height: 8px;
+}
+
 
   .faq {
     padding: 20px 10px;

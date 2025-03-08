@@ -1,15 +1,29 @@
-html, body {
+body, html {
   margin: 0;
   padding: 0;
-  overflow-x: hidden; 
   width: 100%;
+  min-height: 100vh;  /* Ensures full height */
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;  /* Prevents unwanted horizontal scrolling */
+  -ms-overflow-style: none;  /* Hides scrollbar in IE and Edge */
 }
 
+/* Hide scrollbar for Webkit-based browsers (Chrome, Safari) */
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensures the main content expands properly */
+main {
+  flex-grow: 1;
+}
+
+/* Apply box-sizing globally */
 * {
-  box-sizing: border-box; 
+  box-sizing: border-box;
 }
 
-/* 🌟 Logo Styling */
 .logo-text {
   text-decoration: none;
   color: #033264;
@@ -58,7 +72,6 @@ html, body {
   opacity: 0.9;
 }
 
-/* 🌟 Header Styling */
 header {
   display: flex;
   justify-content: space-between;
@@ -69,7 +82,6 @@ header {
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* 🌟 Navbar */
 header nav {
   display: flex;
   align-items: center;
@@ -92,7 +104,6 @@ header nav a:hover {
   border-radius: 5px;
 }
 
-/* 🌟 Profile Section */
 .profile-section {
   position: relative;
   display: flex;
@@ -110,7 +121,6 @@ header nav a:hover {
   transform: scale(1.1);
 }
 
-/* 🌟 Profile Dropdown Menu */
 .profile-dropdown {
   position: absolute;
   top: 40px;
@@ -146,7 +156,6 @@ header nav a:hover {
   border-radius: 5px;
 }
 
-/* 🌟 Hamburger Menu (Mobile View) */
 .hamburger-menu {
   display: none;
   flex-direction: column;
@@ -162,14 +171,12 @@ header nav a:hover {
   transition: all 0.3s ease-in-out;
 }
 
-
-  /* Global Reset */
 body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
-  background-color: #f4f4f9;
-  color: #333;
+  background: linear-gradient(135deg, #f8f9fa 30%, #e3f2fd);
+  color: #333333;
 }
 
 a {
@@ -178,7 +185,6 @@ a {
   font-weight: bold;
 }
 
-/* Auth Container */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -188,7 +194,6 @@ a {
   background-color: #f4f4f9;
 }
 
-/* Auth Card */
 .auth-card {
   background-color: #ffffff;
   padding: 30px 25px;
@@ -199,7 +204,6 @@ a {
   max-width: 400px;
 }
 
-/* Auth Form */
 .auth-form input {
   width: 100%;
   padding: 12px 15px;
@@ -232,13 +236,11 @@ a {
   background-color: #218838;
 }
 
-/* Footer */
 .auth-footer {
   margin-top: 15px;
   font-size: 0.9rem;
 }
 
-/* Password Container */
 .password-container {
   position: relative;
   display: flex;
@@ -247,7 +249,7 @@ a {
 
 .password-container input {
   width: 100%;
-  padding-right: 40px; /* Space for the icon */
+  padding-right: 40px;
 }
 
 .toggle-password {
@@ -262,87 +264,6 @@ a {
 .toggle-password:hover {
   color: #0a4c18;
 }
-
-/* Courses Page Container */
-/* .courses-container {
-  padding: 20px;
-}
-
-.courses-title {
-  text-align: center;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-
-.courses-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
-  padding: 10px;
-}
-
-
-.course-card {
-  background: linear-gradient(135deg, #28a745, #073b13); 
-  border-radius: 15px; 
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); 
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  color: white; 
-}
-
-.course-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); 
-}
-
-
-.course-image {
-  width: 100%;
-  height: 200px;
-  object-fit: cover; 
-  border-bottom: 5px solid rgba(255, 255, 255, 0.2);
-}
-
-
-
-.course-content {
-  padding: 20px;
-  text-align: center;
-}
-
-.course-title {
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-
-.course-description {
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-
-.enroll-button {
-  background-color: rgba(255, 255, 255, 0.8); 
-  color: #28a745;
-  padding: 12px 25px;
-  border: none;
-  border-radius: 25px; 
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.enroll-button:hover {
-  background-color: white;
-  transform: scale(1.1); 
-} */
 
 .container {
   max-width: 800px;
@@ -377,8 +298,6 @@ a {
   color: #ff0000;
 }
 
-
-/* 🌟 Responsive Navbar */
 @media screen and (max-width: 768px) {
   .hamburger-menu {
     display: flex;
