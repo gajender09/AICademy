@@ -57,7 +57,7 @@ const CoursesPage = () => {
             <div className="course-info">
               <h3>{course.title}</h3>
               <p>{course.description}</p>
-              <button onClick={() => navigate(`/courses/${course.id}/roadmap`)}>
+              <button onClick={() => navigate(`${course.title}`)}>
                 📚 View Course
               </button>
             </div>
