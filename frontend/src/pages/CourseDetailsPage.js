@@ -12,48 +12,14 @@ const CourseDetailsPage = () => {
 
     const YOUTUBE_API_KEY = "AIzaSyC6LheDiy_C_vxI7h-g3gbjdJbJQXYnWN4"; // YouTube API key
     const NEWS_API_KEY = "9ec2c25e3b6d4a10a49a3ba2a9f62238"; // NewsAPI key
-    const OPENAI_API_KEY = "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"; // open ai api key
 
     useEffect(() => {
         if (activeSection === "videos" && videos.length === 0) {
             fetchYouTubeVideos();
         } else if (activeSection === "articles" && articles.length === 0) {
             fetchArticles();
-        } else if (activeSection === "roadmap") {
-            fetchRoadmap();
         }
     }, [activeSection]);
-
-    // ✅ Fetch Roadmap Using OpenAI API
-    const fetchRoadmap = async () => {
-        setLoading(true);
-        setRoadmap("Generating roadmap...");
-
-        const prompt = `Create a detailed learning roadmap for ${courseId}. Divide it into beginner, intermediate, and advanced stages with key topics in each stage.`;
-
-        try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${OPENAI_API_KEY}`,
-                },
-                body: JSON.stringify({
-                    model: "gpt-4-turbo",
-                    messages: [{ role: "user", content: prompt }],
-                    temperature: 0.7,
-                }),
-            });
-
-            const data = await response.json();
-            setRoadmap(data.choices?.[0]?.message?.content || "AI could not generate the roadmap at the moment.");
-        } catch (error) {
-            console.error("Error fetching roadmap:", error);
-            setRoadmap("Error fetching roadmap.");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     // ✅ Fetch Articles from NewsAPI
     const fetchArticles = async () => {
@@ -101,13 +67,6 @@ const CourseDetailsPage = () => {
             {/* Main Content */}
             <div className="content">
                 <h2>{activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}</h2>
-
-                {/* Roadmap Section */}
-                {activeSection === "roadmap" && (
-                    <div className="roadmap-section">
-                        <p>{loading ? "Loading..." : roadmap}</p>
-                    </div>
-                )}
 
                 {/* Videos Section */}
                 {activeSection === "videos" && (
