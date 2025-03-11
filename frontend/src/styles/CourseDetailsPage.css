@@ -1,0 +1,94 @@
+.course-details-container {
+  display: flex;
+  height: 100vh;
+  background: #f9f9f9;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  background: #222;
+  color: white;
+  width: 250px;
+  transition: width 0.3s;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar.collapsed {
+  width: 80px;
+}
+
+.sidebar .toggle-btn {
+  background: #444;
+  border: none;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  width: 100%;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar ul li {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+  background: #555;
+  border-radius: 5px;
+}
+
+/* Content Section */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Video & Article Cards */
+.video-grid, .articles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.video-card, .article-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.video-card:hover, .article-card:hover {
+  transform: scale(1.05);
+}
+
+.video-card img, .article-card img {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.video-card a, .article-card a {
+  display: block;
+  margin-top: 10px;
+  color: #007BFF;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.video-card a:hover, .article-card a:hover {
+  text-decoration: underline;
+}
