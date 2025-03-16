@@ -57,13 +57,15 @@
 }
 
 /* Video & Article Cards */
-.video-grid, .articles-grid {
+.video-grid,
+.articles-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
 }
 
-.video-card, .article-card {
+.video-card,
+.article-card {
   background: white;
   padding: 15px;
   border-radius: 10px;
@@ -72,16 +74,19 @@
   transition: transform 0.2s ease;
 }
 
-.video-card:hover, .article-card:hover {
+.video-card:hover,
+.article-card:hover {
   transform: scale(1.05);
 }
 
-.video-card img, .article-card img {
+.video-card img,
+.article-card img {
   width: 100%;
   border-radius: 10px;
 }
 
-.video-card a, .article-card a {
+.video-card a,
+.article-card a {
   display: block;
   margin-top: 10px;
   color: #007BFF;
@@ -89,6 +94,40 @@
   text-decoration: none;
 }
 
-.video-card a:hover, .article-card a:hover {
+.video-card a:hover,
+.article-card a:hover {
   text-decoration: underline;
+}
+
+.quiz-container {
+  padding: 20px;
+}
+
+.quiz-card {
+  border: 1px solid #ddd;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+.quiz-card h3 {
+  margin-bottom: 10px;
+}
+
+.quiz-card ul {
+  list-style: none;
+  padding: 0;
+}
+
+.quiz-card li {
+  margin: 5px 0;
+}
+
+.quiz-container button {
+  background: #28a745;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
 }
