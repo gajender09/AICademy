@@ -1,10 +1,10 @@
-/* Root layout */
+/* Root Layout */
 .student-dashboard {
   display: flex;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: #ffffff;
+  font-family: 'Poppins', sans-serif;
+  background: #f9f9fb;
   min-height: 100vh;
-  color: #000000;
+  color: #333;
   transition: background 0.3s, color 0.3s;
 }
 
@@ -16,8 +16,8 @@
 /* Sidebar */
 .sidebar {
   width: 250px;
-  background: #7b61ff;
-  color: #fff;
+  background: linear-gradient(135deg, #7b61ff, #5b44d8);
+  color: white;
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -32,9 +32,8 @@
 }
 
 .sidebar-logo {
-  font-size: 1.8rem;
+  font-size: 2rem;
   font-weight: bold;
-  color: #fff;
 }
 
 .sidebar-nav {
@@ -49,7 +48,7 @@
   margin-bottom: 12px;
   cursor: pointer;
   border-radius: 8px;
-  transition: background 0.2s;
+  transition: background-color 0.3s, transform 0.3s ease-in-out;
 }
 
 .nav-item svg {
@@ -58,12 +57,13 @@
 
 .nav-item:hover,
 .nav-item.active {
-  background: #5b44d8;
+  background-color: rgba(255,255,255,0.2);
+  transform: scale(1.01);
 }
 
 /* Main Content */
 .main-content {
-  flex: 1;
+  flex-grow: 1;
   padding: 30px;
 }
 
@@ -92,13 +92,13 @@
   align-items: center;
   gap: 10px;
   font-size: 0.95rem;
-  background: #7b61ff;
+  background: linear-gradient(135deg, #7b61ff, #5b44d8);
   padding: 8px 14px;
   border-radius: 10px;
 }
 
 .dark-mode .profile-summary {
-  background: #2e2e42;
+  background: linear-gradient(135deg, #2e2e42, #1c1c24);
 }
 
 /* Notifications */
@@ -144,6 +144,7 @@
 
 .search-input:focus {
   border-color: #7b61ff;
+  box-shadow: 0 0 0 2px rgba(123, 97, 255, 0.2);
 }
 
 /* Overview */
@@ -198,6 +199,11 @@
   background: #2c2c3f;
 }
 
+.course-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
 .course-header {
   display: flex;
   justify-content: space-between;
@@ -224,7 +230,7 @@
 
 .progress-bar {
   flex: 1;
-  background-color: #000000;
+  background-color: #ddd;
   border-radius: 20px;
   height: 10px;
   overflow: hidden;
@@ -257,7 +263,7 @@
 .resume-btn, .browse-btn {
   width: 100%;
   padding: 10px 0;
-  background: #7b61ff;
+  background: linear-gradient(135deg, #7b61ff, #5b44d8);
   color: white;
   font-weight: bold;
   border: none;
@@ -271,7 +277,7 @@
 }
 
 .resume-btn:hover, .browse-btn:hover {
-  background: #5b44d8;
+  background: linear-gradient(135deg, #5b44d8, #4c3a9e);
 }
 
 /* Empty State */
@@ -288,4 +294,30 @@
 .empty-subtitle {
   color: #777;
   margin-bottom: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 200px;
+  }
+}
+
+@media (max-width: 600px) {
+  .sidebar {
+    width: 150px;
+  }
+  .main-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .sidebar {
+    width: 100px;
+    position: static;
+  }
+  .main-content {
+    padding: 15px;
+  }
 }
