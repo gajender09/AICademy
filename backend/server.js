@@ -8,7 +8,7 @@ const courseRoutes = require("./routes/courseRoutes");
 dotenv.config();
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000"];
+const allowedOrigins = ["http://localhost:3000", "https://aicademy-mu.vercel.app"];
 
 app.use(express.json());
 app.use(

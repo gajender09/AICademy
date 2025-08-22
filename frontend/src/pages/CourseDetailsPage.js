@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
+import katex from "katex";
+import "katex/dist/katex.min.css";
 import "../styles/CourseDetailsPage.css";
-import { toast } from "react-toastify"; // Assuming you use react-toastify for notifications
 
 const CourseDetailsPage = () => {
   const { courseId } = useParams();
@@ -31,11 +35,15 @@ const CourseDetailsPage = () => {
   const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
 
   useEffect(() => {
-    const savedCourses = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-    const savedCourse = savedCourses.find((course) => course.courseId === courseId);
+    const savedCourses =
+      JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+    const savedCourse = savedCourses.find(
+      (course) => course.courseId === courseId
+    );
     if (savedCourse) {
       setModules(savedCourse.modules || []);
-      setCompletedSubtopics(savedCourse.completedSubtopics || {}); // Load saved progress
+      setCompletedSubtopics(savedCourse.completedSubtopics || {});
+      setSubtopicContent(savedCourse.subtopicContent || {});
       setIsEnrolled(true);
     } else {
       setIsEnrolled(false);
@@ -43,8 +51,18 @@ const CourseDetailsPage = () => {
   }, [courseId]);
 
   const getFallbackModules = (course) => [
-    { title: `Chapter 1: Introduction to ${course}`, subtopics: ["What is " + course + "?", "Setting up Environment", "First Program"] },
-    { title: `Chapter 2: Core Concepts of ${course}`, subtopics: ["Fundamentals", "Techniques", "Examples"] },
+    {
+      title: `Chapter 1: Introduction to ${course}`,
+      subtopics: [
+        "What is " + course + "?",
+        "Setting up Environment",
+        "First Program",
+      ],
+    },
+    {
+      title: `Chapter 2: Core Concepts of ${course}`,
+      subtopics: ["Fundamentals", "Techniques", "Examples"],
+    },
   ];
 
   const fetchCourseModules = async () => {
@@ -61,7 +79,20 @@ const CourseDetailsPage = () => {
               {
                 parts: [
                   {
-                    text: `Generate a detailed course module breakdown for ${courseId} with chapters and subtopics in this format:\nChapter 1: [Title]\n- [Subtopic]\n- [Subtopic]\nChapter 2: [Title]\n- [Subtopic]\n- [Subtopic]`,
+                    text: `Generate a comprehensive, modular course structure for the topic "${courseId}". 
+  The course should be broken down into 10-12 chapters, each with a descriptive title and 4-6 logically sequenced subtopics. 
+  Use this format strictly:
+  
+  Chapter 1: [Chapter Title]
+  - 1.1 Subtopic Title
+  - 1.2 Subtopic Title
+  - 1.3 Subtopic Title
+  ...
+  Chapter 2: [Chapter Title]
+  - 2.1 Subtopic Title
+  ...
+  
+  Avoid using generic words like 'Topic' or 'Concept'. Tailor the module names to the topic. Make it beginner to advanced level.`,
                   },
                 ],
               },
@@ -69,6 +100,7 @@ const CourseDetailsPage = () => {
           }),
         }
       );
+
       const data = await response.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (rawText) {
@@ -85,25 +117,44 @@ const CourseDetailsPage = () => {
     const lines = text.split("\n").filter((line) => line.trim());
     const chapters = [];
     let currentChapter = null;
+    let chapterNumber = 0;
+
     lines.forEach((line) => {
-      if (line.match(/^Chapter \d+/i)) {
+      const chapterMatch = line.match(/^Chapter \d+: .+/i);
+      if (chapterMatch) {
+        chapterNumber = parseInt(line.match(/\d+/)[0], 10);
         currentChapter = { title: line, subtopics: [] };
         chapters.push(currentChapter);
-      } else if (line.startsWith("-") && currentChapter) {
-        currentChapter.subtopics.push(line.replace("-", "").trim());
+      } else if (line.match(/^- \d+\.\d+ .+/) && currentChapter) {
+        const subtopicMatch = line.match(/^- (\d+\.\d+) (.+)/);
+        if (subtopicMatch) {
+          const subtopicNumber = subtopicMatch[1];
+          let subtopic = subtopicMatch[2].trim();
+          // Clean up any generic terms
+          subtopic = subtopic
+            .replace(/\b(Topic|Concept|Module)\b/gi, "")
+            .trim();
+          if (subtopic)
+            currentChapter.subtopics.push(`${subtopicNumber} ${subtopic}`);
+        }
       }
     });
-    return chapters.length > 0 ? chapters : getFallbackModules(courseId);
+
+    // Validate each chapter has 4-6 subtopics
+    const validChapters = chapters.filter(
+      (chapter) =>
+        chapter.subtopics.length >= 4 && chapter.subtopics.length <= 6
+    );
+
+    return validChapters.length >= 10
+      ? validChapters
+      : getFallbackModules(courseId);
   };
 
   const fetchSubtopicContent = async (chapterTitle, subtopic) => {
     setLoading(true);
-    const prompt = `Generate structured and engaging content for the subtopic "${subtopic}" under the chapter "${chapterTitle}" for the course "${courseId}". Use Markdown syntax with:
-- # Headings for main sections
-- ## Subheadings for subsections
-- - Bullet points for lists
-- \`\`\`code\`\`\` for code snippets (e.g., JavaScript, Python examples)
-Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
+    const prompt = `Generate structured and engaging content for the subtopic "${subtopic}" under the chapter "${chapterTitle}" for the course ${courseId}. Use Markdown syntax with headings (e.g., # Heading), bullet points (e.g., - Item), and code blocks (e.g., \`\`\`code\`\`\`) for examples and tips. Keep it concise and interactive (2-3 paragraphs worth).`; // Changed to courseName
+    console.log("Subtopic Prompt:", prompt);
     try {
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -114,54 +165,178 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
         }
       );
       const data = await response.json();
-      const content = data.candidates?.[0]?.content?.parts?.[0]?.text || "Content not available.";
-      setSubtopicContent((prev) => ({ ...prev, [`${chapterTitle}-${subtopic}`]: content }));
+      const content =
+        data.candidates?.[0]?.content?.parts?.[0]?.text ||
+        "Content not available.";
+      setSubtopicContent((prev) => ({
+        ...prev,
+        [`${chapterTitle}-${subtopic}`]: content,
+      }));
     } catch (error) {
       setError(`Failed to fetch subtopic content: ${error.message}`);
-      setSubtopicContent((prev) => ({ ...prev, [`${chapterTitle}-${subtopic}`]: "Error loading content." }));
+      setSubtopicContent((prev) => ({
+        ...prev,
+        [`${chapterTitle}-${subtopic}`]: "Error loading content.",
+      }));
     }
     setLoading(false);
   };
 
   const parseContent = (content) => {
-    if (!content || typeof content !== "string") return { lines: [], hasCode: false };
-    const lines = content.split("\n").map((line) => line.trim());
+    if (!content || typeof content !== "string")
+      return { lines: [], hasCode: false, hasMath: false };
+    const lines = content.split("\n");
     const parsed = [];
     let inCodeBlock = false;
     let codeBlock = [];
+    let codeLanguage = "";
+    let inMathBlock = false;
+    let mathBlock = [];
 
-    lines.forEach((line) => {
-      if (line.startsWith("```")) {
+    lines.forEach((line, idx) => {
+      if (line.match(/^```(\w+)?$/)) {
         if (inCodeBlock) {
-          parsed.push({ type: "code", content: codeBlock.join("\n") });
+          parsed.push({
+            type: "code",
+            content: codeBlock.join("\n"),
+            language: codeLanguage || "text",
+          });
           codeBlock = [];
           inCodeBlock = false;
+          codeLanguage = "";
         } else {
           inCodeBlock = true;
+          codeLanguage = line.match(/^```(\w+)/)?.[1] || "text";
         }
       } else if (inCodeBlock) {
         codeBlock.push(line);
+      } else if (line.match(/^\$\$[\s\S]*\$\$$/)) {
+        const mathContent = line.replace(/^\$\$/, "").replace(/\$\$$/, "");
+        parsed.push({ type: "math", content: mathContent });
       } else if (line.startsWith("# ")) {
-        parsed.push({ type: "heading", level: 1, content: line.replace("# ", "") });
+        parsed.push({
+          type: "heading",
+          level: 1,
+          content: line.replace("# ", ""),
+        });
       } else if (line.startsWith("## ")) {
-        parsed.push({ type: "heading", level: 2, content: line.replace("## ", "") });
+        parsed.push({
+          type: "heading",
+          level: 2,
+          content: line.replace("## ", ""),
+        });
       } else if (line.startsWith("- ")) {
         parsed.push({ type: "bullet", content: line.replace("- ", "") });
-      } else if (line) {
+      } else if (line.trim()) {
         parsed.push({ type: "paragraph", content: line });
       }
     });
 
     if (inCodeBlock && codeBlock.length > 0) {
-      parsed.push({ type: "code", content: codeBlock.join("\n") });
+      parsed.push({
+        type: "code",
+        content: codeBlock.join("\n"),
+        language: codeLanguage || "text",
+      });
     }
 
-    return { lines: parsed, hasCode: parsed.some((item) => item.type === "code") };
+    return {
+      lines: parsed,
+      hasCode: parsed.some((item) => item.type === "code"),
+      hasMath: parsed.some((item) => item.type === "math"),
+    };
   };
+
+  const updateEnrolledCourses = (updates) => {
+    const savedCourses =
+      JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+    const updatedCourses = savedCourses.map((course) =>
+      course.courseId === courseId ? { ...course, ...updates } : course
+    );
+    localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
+  };
+
+  const toggleSubtopicCompletion = (chapterTitle, subtopic) => {
+    const key = `${chapterTitle}-${subtopic}`;
+    setCompletedSubtopics((prev) => {
+      const newState = { ...prev, [key]: !prev[key] };
+      updateEnrolledCourses({ completedSubtopics: newState });
+      return newState;
+    });
+  };
+
+  const calculateProgress = () => {
+    const totalSubtopics = modules.reduce(
+      (sum, chapter) => sum + chapter.subtopics.length,
+      0
+    );
+    const completedCount =
+      Object.values(completedSubtopics).filter(Boolean).length;
+    return totalSubtopics > 0
+      ? Math.round((completedCount / totalSubtopics) * 100)
+      : 0;
+  };
+
+  const handleEnroll = () => {
+    if (isEnrolled) {
+      toast.info(`You are already enrolled in ${courseId}!`);
+      return;
+    }
+    const courseData = {
+      courseId,
+      modules: modules.length > 0 ? modules : getFallbackModules(courseId),
+      completedSubtopics: {},
+      subtopicContent: {},
+      lastAccessed: new Date().toISOString(),
+    };
+    const savedCourses =
+      JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+    localStorage.setItem(
+      "enrolledCourses",
+      JSON.stringify([...savedCourses, courseData])
+    );
+    setIsEnrolled(true);
+    toast.success(`Enrolled in ${courseId} successfully!`);
+    fetchCourseModules();
+  };
+
+  const handleUnroll = () => {
+    if (!isEnrolled) {
+      toast.info(`You are not enrolled in ${courseId}!`);
+      return;
+    }
+    const savedCourses =
+      JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+    const updatedCourses = savedCourses.filter(
+      (course) => course.courseId !== courseId
+    );
+    localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
+    setIsEnrolled(false);
+    setModules([]);
+    setCompletedSubtopics({});
+    setSubtopicContent({});
+    toast.success(`Unrolled from ${courseId} successfully!`);
+  };
+
+  const getFallbackGlossary = (course) => [
+    `Variable: A named storage location in ${course} that holds a value.`,
+    `Function: A reusable block of code in ${course} that performs a specific task.`,
+    `Loop: A control structure in ${course} that repeats a block of code.`,
+    `Array: A data structure in ${course} that stores multiple values.`,
+    `Object: A collection of key-value pairs in ${course}.`,
+  ];
 
   const fetchGlossary = async () => {
     setLoading(true);
-    setGlossary([`Term 1: Basic definition related to ${courseId}`, `Term 2: Another key concept`]);
+    const cacheKey = `glossary_${courseId}`;
+    const cachedGlossary = localStorage.getItem(cacheKey);
+
+    if (cachedGlossary) {
+      setGlossary(JSON.parse(cachedGlossary));
+      setLoading(false);
+      return;
+    }
+
     try {
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
@@ -169,18 +344,44 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            contents: [{ parts: [{ text: `Generate a glossary of 5-10 key terms for ${courseId} in this format:\nTerm: Definition\nTerm: Definition` }] }],
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `Generate a glossary of 5-10 key terms for ${courseId}. Format each term as:
+                    [Term]: [Definition]
+                    Ensure each term is a single word or short phrase without markdown (e.g., no ** or Term: prefix), and definitions are concise (1-2 sentences).`,
+                  },
+                ],
+              },
+            ],
           }),
         }
       );
       const data = await response.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
-      if (rawText) {
-        const glossaryItems = rawText.split("\n").filter((line) => line.includes(":")).map((line) => line.trim());
-        setGlossary(glossaryItems.length > 0 ? glossaryItems : [`Term: Definition not available for ${courseId}`]);
-      }
+      const glossaryItems = rawText
+        .split("\n")
+        .filter((line) => line.includes(":") && line.trim())
+        .map((line) => {
+          // Remove Term:, term:, TERM:, **, and any leading/trailing whitespace
+          return line
+            .replace(/^(Term:|term:|TERM:)\s*/i, "")
+            .replace(/\*\*/g, "")
+            .trim();
+        });
+      const validGlossary =
+        glossaryItems.length >= 5
+          ? glossaryItems
+          : getFallbackGlossary(courseId);
+      setGlossary(validGlossary);
+      localStorage.setItem(cacheKey, JSON.stringify(validGlossary));
+      updateEnrolledCourses({ glossary: validGlossary });
     } catch (error) {
-      setError("Failed to fetch glossary, using fallback.");
+      setError(`Failed to fetch glossary: ${error.message}. Using fallback.`);
+      const fallback = getFallbackGlossary(courseId);
+      setGlossary(fallback);
+      localStorage.setItem(cacheKey, JSON.stringify(fallback));
     }
     setLoading(false);
   };
@@ -188,8 +389,22 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
   const fetchRoadmap = async () => {
     setLoading(true);
     const fallbackRoadmap = [
-      { phase: "Phase 1: Foundation", steps: ["Learn the basics of " + courseId, "Set up your environment", "Write your first program"] },
-      { phase: "Phase 2: Intermediate", steps: ["Understand core concepts", "Practice with examples", "Explore advanced techniques"] },
+      {
+        phase: "Phase 1: Foundation",
+        steps: [
+          "Learn the basics of " + courseId,
+          "Set up your environment",
+          "Write your first program",
+        ],
+      },
+      {
+        phase: "Phase 2: Intermediate",
+        steps: [
+          "Understand core concepts",
+          "Practice with examples",
+          "Explore advanced techniques",
+        ],
+      },
     ];
     setRoadmap(fallbackRoadmap);
     try {
@@ -208,15 +423,25 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                 ],
               },
             ],
-          })
+          }),
         }
       );
       const data = await response.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (rawText) {
         try {
-          const parsedRoadmap = JSON.parse(rawText.replace(/```json/, "").replace(/```/, "").trim());
-          if (Array.isArray(parsedRoadmap) && parsedRoadmap.every((item) => item.phase && Array.isArray(item.steps))) {
+          const parsedRoadmap = JSON.parse(
+            rawText
+              .replace(/```json/, "")
+              .replace(/```/, "")
+              .trim()
+          );
+          if (
+            Array.isArray(parsedRoadmap) &&
+            parsedRoadmap.every(
+              (item) => item.phase && Array.isArray(item.steps)
+            )
+          ) {
             setRoadmap(parsedRoadmap);
           } else {
             setError("Invalid roadmap format from API, using fallback.");
@@ -244,13 +469,22 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
 
     try {
       const query = `"${courseId} tutorial" site:geeksforgeeks.org OR site:w3schools.com OR site:tutorialspoint.com OR site:codecademy.com OR site:freecodecamp.org`;
-      const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=10`;
+      const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(
+        query
+      )}&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=10`;
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
 
       const data = await response.json();
       if (data.items && data.items.length > 0) {
-        const validSites = ["geeksforgeeks.org", "w3schools.com", "tutorialspoint.com", "codecademy.com", "freecodecamp.org"];
+        const validSites = [
+          "geeksforgeeks.org",
+          "w3schools.com",
+          "tutorialspoint.com",
+          "codecademy.com",
+          "freecodecamp.org",
+        ];
         const courseRegex = new RegExp(`\\b${courseId.toLowerCase()}\\b`, "i");
 
         const filteredArticles = data.items
@@ -258,8 +492,11 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
             const title = item.title.toLowerCase();
             const snippet = item.snippet.toLowerCase();
             const hostname = new URL(item.link).hostname.replace("www.", "");
-            const isEducationalSite = validSites.some((site) => hostname.includes(site));
-            const isRelevant = courseRegex.test(title) || courseRegex.test(snippet);
+            const isEducationalSite = validSites.some((site) =>
+              hostname.includes(site)
+            );
+            const isRelevant =
+              courseRegex.test(title) || courseRegex.test(snippet);
             return isEducationalSite && isRelevant;
           })
           .map((item) => ({
@@ -269,9 +506,12 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
             source: new URL(item.link).hostname.replace("www.", ""),
           }));
 
-        const uniqueArticles = [...new Map(filteredArticles.map((item) => [item.url, item])).values()];
+        const uniqueArticles = [
+          ...new Map(filteredArticles.map((item) => [item.url, item])).values(),
+        ];
         setArticles(uniqueArticles.slice(0, 6));
-        if (uniqueArticles.length === 0) setError(`No relevant "${courseId}" tutorials found.`);
+        if (uniqueArticles.length === 0)
+          setError(`No relevant "${courseId}" tutorials found.`);
       } else {
         setError(`No articles found for "${courseId}".`);
       }
@@ -292,9 +532,12 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
 
     try {
       const query = `${courseId} tutorial lecture`;
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(query)}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`;
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${encodeURIComponent(
+        query
+      )}&type=video&maxResults=5&key=${YOUTUBE_API_KEY}`;
       const response = await fetch(url);
-      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`HTTP error! Status: ${response.status}`);
       const data = await response.json();
 
       if (data.items && data.items.length > 0) {
@@ -326,37 +569,46 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                 ],
               },
             ],
-          })
+          }),
         }
       );
-      if (!response.ok) throw new Error(`API request failed: ${response.status}`);
+      if (!response.ok)
+        throw new Error(`API request failed: ${response.status}`);
       const data = await response.json();
       const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
       if (!rawText) throw new Error("No content returned from Gemini API");
-  
-      const questionBlocks = rawText.split("\n\n").filter((block) => block.trim());
-      const questions = questionBlocks.map((block, index) => {
-        const lines = block.split("\n").filter((line) => line.trim());
-        if (lines.length !== 6 || !lines[0].startsWith("Q:") || !lines[5].startsWith("Correct:")) {
+
+      const questionBlocks = rawText
+        .split("\n\n")
+        .filter((block) => block.trim());
+      const questions = questionBlocks
+        .map((block, index) => {
+          const lines = block.split("\n").filter((line) => line.trim());
+          if (
+            lines.length !== 6 ||
+            !lines[0].startsWith("Q:") ||
+            !lines[5].startsWith("Correct:")
+          ) {
+            return {
+              question: `Default Question ${index + 1} for ${courseId}`,
+              options: ["Option A", "Option B", "Option C", "Option D"],
+              correct: "A",
+            };
+          }
+
           return {
-            question: `Default Question ${index + 1} for ${courseId}`,
-            options: ["Option A", "Option B", "Option C", "Option D"],
-            correct: "A",
+            question: lines[0].replace("Q: ", ""),
+            options: [
+              lines[1].replace("A: ", ""),
+              lines[2].replace("B: ", ""),
+              lines[3].replace("C: ", ""),
+              lines[4].replace("D: ", ""),
+            ],
+            correct: lines[5].replace("Correct: ", ""),
           };
-        }
-  
-        return {
-          question: lines[0].replace("Q: ", ""),
-          options: [
-            lines[1].replace("A: ", ""),
-            lines[2].replace("B: ", ""),
-            lines[3].replace("C: ", ""),
-            lines[4].replace("D: ", ""),
-          ],
-          correct: lines[5].replace("Correct: ", ""),
-        };
-      }).slice(0, 10);
-  
+        })
+        .slice(0, 10);
+
       if (questions.length < 10) {
         for (let i = questions.length; i < 10; i++) {
           questions.push({
@@ -366,7 +618,7 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
           });
         }
       }
-  
+
       setQuizQuestions(questions);
     } catch (error) {
       setError(`Quiz fetch error: ${error.message}`);
@@ -382,10 +634,10 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
     }
     setLoading(false);
   };
-  
+
   const handleQuizSubmit = () => {
     if (quizQuestions.length === 0) {
-      fetchQuizQuestions(); // Fetch new questions if not already fetched
+      fetchQuizQuestions();
       return;
     }
     let score = 0;
@@ -395,102 +647,145 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
     const percentage = (score / quizQuestions.length) * 100;
     setQuizScore(percentage);
     fetchRecommendations(percentage);
-    setUserAnswers({}); // Reset answers for next attempt
-    fetchQuizQuestions(); // Fetch new questions for next attempt
-  };
-  const toggleSubtopicCompletion = (chapterTitle, subtopic) => {
-    const key = `${chapterTitle}-${subtopic}`;
-    setCompletedSubtopics((prev) => {
-      const newState = { ...prev, [key]: !prev[key] };
-      const savedCourses = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-      const updatedCourses = savedCourses.map((course) =>
-        course.courseId === courseId ? { ...course, completedSubtopics: newState } : course
-      );
-      localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
-      return newState;
-    });
   };
 
-  const calculateProgress = () => {
-    const totalSubtopics = modules.reduce((sum, chapter) => sum + chapter.subtopics.length, 0);
-    const completedCount = Object.values(completedSubtopics).filter(Boolean).length;
-    return totalSubtopics > 0 ? Math.round((completedCount / totalSubtopics) * 100) : 0;
+  // const toggleSubtopicCompletion = (chapterTitle, subtopic) => {
+  //   const key = `${chapterTitle}-${subtopic}`;
+  //   setCompletedSubtopics((prev) => {
+  //     const newState = { ...prev, [key]: !prev[key] };
+  //     const savedCourses =
+  //       JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+  //     const updatedCourses = savedCourses.map((course) =>
+  //       course.courseId === courseId
+  //         ? { ...course, completedSubtopics: newState }
+  //         : course
+  //     );
+  //     localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
+  //     return newState;
+  //   });
+  // };
+
+  const retakeQuiz = () => {
+    setUserAnswers({});
+    setQuizScore(null);
+    setRecommendations([]);
+    fetchQuizQuestions(); // Fetch new questions for retake
   };
 
-  const handleEnroll = () => {
-    if (isEnrolled) {
-      toast.info(`You are already enrolled in ${courseId}!`);
-      return;
-    }
-    const courseData = {
-      courseId,
-      modules: modules.length > 0 ? modules : getFallbackModules(courseId),
-      completedSubtopics: {},
-      lastAccessed: new Date().toISOString(),
-    };
-    const savedCourses = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-    const isAlreadyEnrolled = savedCourses.some((course) => course.courseId === courseId);
-    if (!isAlreadyEnrolled) {
-      localStorage.setItem("enrolledCourses", JSON.stringify([...savedCourses, courseData]));
-      setIsEnrolled(true);
-      toast.success(`Enrolled in ${courseId} successfully!`);
-    } else {
-      toast.info(`You are already enrolled in ${courseId}!`);
-    }
-  };
+  // const calculateProgress = () => {
+  //   const totalSubtopics = modules.reduce(
+  //     (sum, chapter) => sum + chapter.subtopics.length,
+  //     0
+  //   );
+  //   const completedCount =
+  //     Object.values(completedSubtopics).filter(Boolean).length;
+  //   return totalSubtopics > 0
+  //     ? Math.round((completedCount / totalSubtopics) * 100)
+  //     : 0;
+  // };
 
-  const handleUnroll = () => {
-    if (!isEnrolled) {
-      toast.info(`You are not enrolled in ${courseId}!`);
-      return;
-    }
-    const savedCourses = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-    const updatedCourses = savedCourses.filter((course) => course.courseId !== courseId);
-    localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
-    setIsEnrolled(false);
-    setModules([]);
-    setCompletedSubtopics({});
-    toast.success(`Unrolled from ${courseId} successfully!`);
-  };
+  // const handleEnroll = () => {
+  //   if (isEnrolled) {
+  //     toast.info(`You are already enrolled in ${courseId}!`);
+  //     return;
+  //   }
+  //   const courseData = {
+  //     courseId,
+  //     modules: modules.length > 0 ? modules : getFallbackModules(courseId),
+  //     completedSubtopics: {},
+  //     lastAccessed: new Date().toISOString(),
+  //   };
+  //   const savedCourses =
+  //     JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+  //   const isAlreadyEnrolled = savedCourses.some(
+  //     (course) => course.courseId === courseId
+  //   );
+  //   if (!isAlreadyEnrolled) {
+  //     localStorage.setItem(
+  //       "enrolledCourses",
+  //       JSON.stringify([...savedCourses, courseData])
+  //     );
+  //     setIsEnrolled(true);
+  //     toast.success(`Enrolled in ${courseId} successfully!`);
+  //   } else {
+  //     toast.info(`You are already enrolled in ${courseId}!`);
+  //   }
+  // };
 
+  // const handleUnroll = () => {
+  //   if (!isEnrolled) {
+  //     toast.info(`You are not enrolled in ${courseId}!`);
+  //     return;
+  //   }
+  //   const savedCourses =
+  //     JSON.parse(localStorage.getItem("enrolledCourses")) || [];
+  //   const updatedCourses = savedCourses.filter(
+  //     (course) => course.courseId !== courseId
+  //   );
+  //   localStorage.setItem("enrolledCourses", JSON.stringify(updatedCourses));
+  //   setIsEnrolled(false);
+  //   setModules([]);
+  //   setCompletedSubtopics({});
+  //   toast.success(`Unrolled from ${courseId} successfully!`);
+  // };
 
   const fetchRecommendations = async (score) => {
     setLoading(true);
     setRecommendations([]);
     try {
-      const query = `${courseId} tutorial ${score < 80 ? "beginner" : "advanced"} site:geeksforgeeks.org OR site:w3schools.com OR site:tutorialspoint.com OR site:codecademy.com OR site:freecodecamp.org`;
-      const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(query)}&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=5`;
+      const query = `${courseId} tutorial ${
+        score < 80 ? "beginner" : "advanced"
+      } site:geeksforgeeks.org OR site:w3schools.com OR site:tutorialspoint.com OR site:codecademy.com OR site:freecodecamp.org`;
+      const url = `https://www.googleapis.com/customsearch/v1?q=${encodeURIComponent(
+        query
+      )}&cx=${GOOGLE_CSE_ID}&key=${GOOGLE_API_KEY}&num=5`;
       const response = await fetch(url);
       if (!response.ok) throw new Error(`Google API error: ${response.status}`);
       const data = await response.json();
 
-      const recs = data.items?.map((item) => ({
-        title: item.title,
-        description: item.snippet || "No description available",
-        url: item.link,
-        source: new URL(item.link).hostname.replace("www.", ""),
-      })) || [];
+      const recs =
+        data.items?.map((item) => ({
+          title: item.title,
+          description: item.snippet || "No description available",
+          url: item.link,
+          source: new URL(item.link).hostname.replace("www.", ""),
+        })) || [];
       setRecommendations(recs);
     } catch (error) {
       setError(`Recommendations fetch error: ${error.message}`);
-      setRecommendations([{ title: "Sample Article", description: "Learn more about " + courseId, url: "#", source: "example.com" }]);
+      setRecommendations([
+        {
+          title: "Sample Article",
+          description: "Learn more about " + courseId,
+          url: "#",
+          source: "example.com",
+        },
+      ]);
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    if (activeSection === "content" && modules.length === 0 && !isEnrolled) fetchCourseModules();
-    else if (activeSection === "glossary" && glossary.length === 0) fetchGlossary();
-    else if (activeSection === "roadmap" && roadmap.length === 0) fetchRoadmap();
-    else if (activeSection === "articles" && articles.length === 0) fetchArticles();
+    if (activeSection === "content" && modules.length === 0 && isEnrolled)
+      fetchCourseModules();
+    else if (activeSection === "glossary" && glossary.length === 0)
+      fetchGlossary();
+    else if (activeSection === "roadmap" && roadmap.length === 0)
+      fetchRoadmap();
+    else if (activeSection === "articles" && articles.length === 0)
+      fetchArticles();
     else if (activeSection === "videos" && videos.length === 0) fetchVideos();
-    else if (activeSection === "quiz" && quizQuestions.length === 0) fetchQuizQuestions();
+    else if (activeSection === "quiz" && quizQuestions.length === 0)
+      fetchQuizQuestions();
   }, [activeSection, isEnrolled]);
 
   return (
     <div className="course-details-page">
       <div className={`sidebar ${sidebarOpen ? "open" : "closed"}`}>
-        <button className="toggle-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
+        <button
+          className="toggle-btn"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+        >
           {sidebarOpen ? "◄" : "►"}
         </button>
         {sidebarOpen && (
@@ -500,37 +795,49 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
             <nav className="sidebar-nav">
               <button
                 onClick={() => setActiveSection("content")}
-                className={`nav-item ${activeSection === "content" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "content" ? "active" : ""
+                }`}
               >
                 📖 Content
               </button>
               <button
                 onClick={() => setActiveSection("glossary")}
-                className={`nav-item ${activeSection === "glossary" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "glossary" ? "active" : ""
+                }`}
               >
                 📚 Glossary
               </button>
               <button
                 onClick={() => setActiveSection("roadmap")}
-                className={`nav-item ${activeSection === "roadmap" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "roadmap" ? "active" : ""
+                }`}
               >
                 🛤️ Roadmap
               </button>
               <button
                 onClick={() => setActiveSection("articles")}
-                className={`nav-item ${activeSection === "articles" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "articles" ? "active" : ""
+                }`}
               >
                 📰 Articles
               </button>
               <button
                 onClick={() => setActiveSection("videos")}
-                className={`nav-item ${activeSection === "videos" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "videos" ? "active" : ""
+                }`}
               >
                 🎥 Videos
               </button>
               <button
                 onClick={() => setActiveSection("quiz")}
-                className={`nav-item ${activeSection === "quiz" ? "active" : ""}`}
+                className={`nav-item ${
+                  activeSection === "quiz" ? "active" : ""
+                }`}
               >
                 🧠 Quiz
               </button>
@@ -556,63 +863,148 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                     Unroll from Course
                   </button>
                 )}
-                <div className="progress-bar" style={{ width: `${calculateProgress()}%` }}></div>
+                <div
+                  className="progress-bar"
+                  style={{ width: `${calculateProgress()}%` }}
+                ></div>
                 <div className="chapters-container">
                   {modules.length > 0 ? (
                     modules.map((chapter, index) => (
                       <div key={index} className="chapter-card">
                         <div
                           className="chapter-header"
-                          onClick={() => setExpandedChapter(expandedChapter === index ? null : index)}
+                          onClick={() =>
+                            setExpandedChapter(
+                              expandedChapter === index ? null : index
+                            )
+                          }
                         >
                           <h3 className="chapter-title">{chapter.title}</h3>
-                          <span className="expand-toggle">{expandedChapter === index ? "▲" : "▼"}</span>
+                          <span className="expand-toggle">
+                            {expandedChapter === index ? "▲" : "▼"}
+                          </span>
                         </div>
                         {expandedChapter === index && (
                           <ul className="subtopics-list">
                             {chapter.subtopics.map((subtopic, i) => {
                               const key = `${chapter.title}-${subtopic}`;
-                              const isCompleted = completedSubtopics[key] || false;
+                              const isCompleted =
+                                completedSubtopics[key] || false;
                               return (
                                 <li key={i} className="subtopic-item">
                                   <div className="subtopic-header">
                                     <input
                                       type="checkbox"
                                       checked={isCompleted}
-                                      onChange={() => toggleSubtopicCompletion(chapter.title, subtopic)}
+                                      onChange={() =>
+                                        toggleSubtopicCompletion(
+                                          chapter.title,
+                                          subtopic
+                                        )
+                                      }
                                     />
                                     <span
                                       className="subtopic-title"
                                       onClick={() => {
                                         setExpandedSubtopic(
-                                          expandedSubtopic === `${index}-${i}` ? null : `${index}-${i}`
+                                          expandedSubtopic === `${index}-${i}`
+                                            ? null
+                                            : `${index}-${i}`
                                         );
-                                        if (!subtopicContent[key]) fetchSubtopicContent(chapter.title, subtopic);
+                                        if (!subtopicContent[key])
+                                          fetchSubtopicContent(
+                                            chapter.title,
+                                            subtopic
+                                          );
                                       }}
                                     >
                                       {subtopic}
                                     </span>
                                     <span className="expand-toggle">
-                                      {expandedSubtopic === `${index}-${i}` ? "▲" : "▼"}
+                                      {expandedSubtopic === `${index}-${i}`
+                                        ? "▲"
+                                        : "▼"}
                                     </span>
                                   </div>
                                   {expandedSubtopic === `${index}-${i}` && (
-                                    <div className="subtopic-content">
+                                    <div className="subtopic-content chatgpt-style">
                                       {(() => {
-                                        const { lines } = parseContent(subtopicContent[key] || "");
+                                        const { lines } = parseContent(
+                                          subtopicContent[key] || ""
+                                        );
                                         return lines.map((line, idx) => {
                                           if (line.type === "heading") {
                                             return line.level === 1 ? (
-                                              <h1 key={idx}>{line.content}</h1>
+                                              <h1
+                                                key={idx}
+                                                className="content-heading"
+                                              >
+                                                {line.content}
+                                              </h1>
                                             ) : (
-                                              <h2 key={idx}>{line.content}</h2>
+                                              <h2
+                                                key={idx}
+                                                className="content-subheading"
+                                              >
+                                                {line.content}
+                                              </h2>
                                             );
                                           } else if (line.type === "bullet") {
-                                            return <li key={idx}>{line.content}</li>;
+                                            return (
+                                              <li
+                                                key={idx}
+                                                className="content-bullet"
+                                              >
+                                                {line.content}
+                                              </li>
+                                            );
                                           } else if (line.type === "code") {
-                                            return <pre key={idx}><code>{line.content}</code></pre>;
+                                            return (
+                                              <div
+                                                key={idx}
+                                                className="dark-card"
+                                              >
+                                                <SyntaxHighlighter
+                                                  language={line.language}
+                                                  style={vscDarkPlus}
+                                                  customStyle={{
+                                                    margin: 0,
+                                                    borderRadius: "8px",
+                                                  }}
+                                                >
+                                                  {line.content}
+                                                </SyntaxHighlighter>
+                                              </div>
+                                            );
+                                          } else if (line.type === "math") {
+                                            return (
+                                              <div
+                                                key={idx}
+                                                className="dark-card math-card"
+                                              >
+                                                <div
+                                                  dangerouslySetInnerHTML={{
+                                                    __html:
+                                                      katex.renderToString(
+                                                        line.content,
+                                                        {
+                                                          throwOnError: false,
+                                                          displayMode: true,
+                                                        }
+                                                      ),
+                                                  }}
+                                                />
+                                              </div>
+                                            );
                                           } else {
-                                            return <p key={idx}>{line.content}</p>;
+                                            return (
+                                              <p
+                                                key={idx}
+                                                className="content-paragraph"
+                                              >
+                                                {line.content}
+                                              </p>
+                                            );
                                           }
                                         });
                                       })()}
@@ -626,7 +1018,9 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                       </div>
                     ))
                   ) : (
-                    <p>No content available yet. Enroll to generate the course.</p>
+                    <p>
+                      No content available yet. Enroll to generate the course.
+                    </p>
                   )}
                 </div>
               </div>
@@ -635,16 +1029,24 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
             {activeSection === "glossary" && (
               <div className="glossary-section">
                 <h1 className="section-title">Glossary</h1>
-                <div className="glossary-grid">
-                  {glossary.map((item, index) => {
-                    const [term, definition] = item.split(": ");
-                    return (
-                      <div key={index} className="glossary-card">
-                        <h3 className="glossary-term">{term || "Unknown Term"}</h3>
-                        <p className="glossary-definition">{definition || "Definition not available"}</p>
-                      </div>
-                    );
-                  })}
+                <div className="glossary-container">
+                  {glossary.length > 0 ? (
+                    glossary.map((item, index) => {
+                      const [term, definition] = item.split(": ");
+                      return (
+                        <div key={index} className="glossary-card">
+                          <h3 className="glossary-term">
+                            {term || "Unknown Term"}
+                          </h3>
+                          <p className="glossary-definition">
+                            {definition || "Definition not available"}
+                          </p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p>No glossary terms available yet.</p>
+                  )}
                 </div>
               </div>
             )}
@@ -659,7 +1061,9 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                       <hr className="phase-separator" />
                       <ul className="roadmap-steps">
                         {phase.steps.map((step, i) => (
-                          <li key={i} className="roadmap-step">{step}</li>
+                          <li key={i} className="roadmap-step">
+                            {step}
+                          </li>
                         ))}
                       </ul>
                     </div>
@@ -670,15 +1074,24 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
 
             {activeSection === "articles" && (
               <div className="articles-section">
-                <h1 className="section-title">{courseId} Tutorials & Articles</h1>
+                <h1 className="section-title">
+                  {courseId} Tutorials & Articles
+                </h1>
                 {articles.length > 0 ? (
                   <div className="articles-grid">
                     {articles.map((article, index) => (
                       <div key={index} className="article-card">
-                        <div className={`article-source ${article.source}`}>{article.source}</div>
+                        <div className={`article-source ${article.source}`}>
+                          {article.source}
+                        </div>
                         <h3 className="article-title">{article.title}</h3>
                         <p className="article-summary">{article.description}</p>
-                        <a href={article.url} target="_blank" rel="noopener noreferrer" className="article-link">
+                        <a
+                          href={article.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="article-link"
+                        >
                           Read More
                         </a>
                       </div>
@@ -692,14 +1105,25 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
 
             {activeSection === "videos" && (
               <div className="videos-section">
-                <h1 className="section-title">Top {courseId} Tutorials & Lectures</h1>
+                <h1 className="section-title">
+                  Top {courseId} Tutorials & Lectures
+                </h1>
                 {videos.length > 0 ? (
                   <div className="videos-grid">
                     {videos.map((video, index) => (
                       <div key={index} className="video-card">
-                        <img src={video.snippet.thumbnails.medium.url} alt={video.snippet.title} className="video-thumbnail" />
+                        <img
+                          src={video.snippet.thumbnails.medium.url}
+                          alt={video.snippet.title}
+                          className="video-thumbnail"
+                        />
                         <h3 className="video-title">{video.snippet.title}</h3>
-                        <a href={`https://www.youtube.com/watch?v=${video.id.videoId}`} target="_blank" rel="noopener noreferrer" className="video-link">
+                        <a
+                          href={`https://www.youtube.com/watch?v=${video.id.videoId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="video-link"
+                        >
                           Watch Now
                         </a>
                       </div>
@@ -720,46 +1144,93 @@ Keep it concise, interactive, and educational (2-3 paragraphs worth).`;
                       <div className="quiz-container">
                         {quizQuestions.map((q, index) => (
                           <div key={index} className="quiz-question">
-                            <h3>{index + 1}. {q.question}</h3>
+                            <h3>
+                              {index + 1}. {q.question}
+                            </h3>
                             {q.options.map((option, optIdx) => (
                               <label key={optIdx} className="quiz-option">
                                 <input
                                   type="radio"
                                   name={`question-${index}`}
                                   value={String.fromCharCode(65 + optIdx)}
-                                  checked={userAnswers[index] === String.fromCharCode(65 + optIdx)}
-                                  onChange={() => setUserAnswers((prev) => ({ ...prev, [index]: String.fromCharCode(65 + optIdx) }))}
+                                  checked={
+                                    userAnswers[index] ===
+                                    String.fromCharCode(65 + optIdx)
+                                  }
+                                  onChange={() =>
+                                    setUserAnswers((prev) => ({
+                                      ...prev,
+                                      [index]: String.fromCharCode(65 + optIdx),
+                                    }))
+                                  }
                                 />
                                 {option}
                               </label>
                             ))}
                           </div>
                         ))}
-                        <button className="submit-quiz" onClick={handleQuizSubmit}>
+                        <button
+                          className="submit-quiz"
+                          onClick={handleQuizSubmit}
+                        >
                           Submit Quiz
                         </button>
                       </div>
                     ) : (
                       <div className="quiz-results">
-                        <h2>Your Score: {quizScore.toFixed(1)}% ({Math.round(quizScore / 10)}/10)</h2>
+                        <h2>
+                          Your Score: {quizScore.toFixed(1)}% (
+                          {Math.round(quizScore / 10)}/10)
+                        </h2>
+                        <button className="retake-quiz" onClick={retakeQuiz}>
+                          Retake Quiz
+                        </button>
                         <div className="answers-review">
                           <h3>Review Your Answers:</h3>
-                          {quizQuestions.map((q, index) => (
-                            <div key={index} className={`answer-item ${userAnswers[index] === q.correct ? "correct" : "incorrect"}`}>
-                              <p><strong>Q:</strong> {q.question}</p>
-                              <p><strong>Your Answer:</strong> {userAnswers[index] || "Not answered"} ({q.options[userAnswers[index]?.charCodeAt(0) - 65] || "N/A"})</p>
-                              <p><strong>Correct Answer:</strong> {q.correct} ({q.options[q.correct.charCodeAt(0) - 65]})</p>
-                            </div>
-                          ))}
+                          {quizQuestions.map((q, index) => {
+                            const userAnswer = userAnswers[index];
+                            const isCorrect = userAnswer === q.correct;
+                            return (
+                              <div
+                                key={index}
+                                className={`answer-item ${
+                                  isCorrect ? "correct" : "incorrect"
+                                }`}
+                              >
+                                <p>
+                                  <strong>Q:</strong> {q.question}
+                                </p>
+                                <p>
+                                  <strong>Your Answer:</strong>{" "}
+                                  {userAnswer
+                                    ? `${userAnswer}: ${
+                                        q.options[userAnswer.charCodeAt(0) - 65]
+                                      }`
+                                    : "Not answered"}
+                                </p>
+                                <p>
+                                  <strong>Correct Answer:</strong> {q.correct}:{" "}
+                                  {q.options[q.correct.charCodeAt(0) - 65]}
+                                </p>
+                              </div>
+                            );
+                          })}
                         </div>
                         <h3>Recommended Articles:</h3>
                         <div className="recommendations-grid">
                           {recommendations.map((rec, index) => (
                             <div key={index} className="recommendation-card">
-                              <div className={`article-source ${rec.source}`}>{rec.source}</div>
+                              <div className={`article-source ${rec.source}`}>
+                                {rec.source}
+                              </div>
                               <h4>{rec.title}</h4>
                               <p>{rec.description}</p>
-                              <a href={rec.url} target="_blank" rel="noopener noreferrer" className="article-link">
+                              <a
+                                href={rec.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="article-link"
+                              >
                                 Read More
                               </a>
                             </div>

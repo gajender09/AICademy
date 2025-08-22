@@ -120,17 +120,51 @@
   border-radius: 5px;
 }
 
-.glossary-grid {
+/* Glossary Section */
+.glossary-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 2em;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 1.5em;
+}
+
+.glossary-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 1em;
 }
 
 .glossary-card {
-  background: white;
-  padding: 15px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.glossary-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.glossary-term {
+  font-size: 1.3em;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+  line-height: 1.4;
+}
+.glossary-definition {
+  font-size: 1em;
+  font-weight: 400;
+  color: #4a4a4a;
+  margin: 0.5em 0 0;
+  line-height: 1.6;
 }
 
 .roadmap-phase {
@@ -267,6 +301,49 @@
   border: 1px solid #f5c6cb;
 }
 
+.quiz-results {
+  margin-top: 20px;
+}
+
+.answers-review {
+  margin-top: 20px;
+}
+
+.answer-item {
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.answer-item.correct {
+  background-color: #e6ffed;
+  border-color: #28a745;
+}
+
+.answer-item.incorrect {
+  background-color: #ffe6e6;
+  border-color: #dc3545;
+}
+
+.answer-item p {
+  margin: 5px 0;
+}
+
+.retake-quiz {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.retake-quiz:hover {
+  background-color: #0056b3;
+}
+
 .recommendations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -331,4 +408,93 @@
 
 .enroll-btn:hover {
   background: #16a085;
+}
+
+.content-section {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.chatgpt-style {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+.content-heading {
+  font-size: 1.8em;
+  font-weight: 600;
+  margin: 1.5em 0 0.5em;
+  color: #1a1a1a;
+}
+
+.content-subheading {
+  font-size: 1.4em;
+  font-weight: 500;
+  margin: 1.2em 0 0.4em;
+  color: #1a1a1a;
+}
+
+.content-paragraph {
+  margin: 0.8em 0;
+  font-size: 1em;
+}
+
+.content-bullet {
+  margin: 0.4em 0;
+  font-size: 1em;
+  list-style-type: disc;
+  margin-left: 20px;
+}
+
+/* Dark card for code and math */
+.dark-card {
+  background-color: #1e1e1e;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 1em 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.math-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.dark-card pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+/* Progress bar and other existing styles */
+.progress-bar {
+  height: 8px;
+  background-color: #28a745;
+  transition: width 0.3s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .glossary-section {
+    padding: 15px;
+  }
+
+  .glossary-container {
+    gap: 0.8em;
+  }
+
+  .glossary-card {
+    padding: 12px;
+  }
+
+  .glossary-term {
+    font-size: 1.2em;
+  }
+
+  .section-title {
+    font-size: 1.8em;
+  }
 }
