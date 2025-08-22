@@ -39,10 +39,11 @@ const Register = () => {
     }
   
     // Extract first name (split at first space)
-    const firstName = fullName.split(" ")[0];  
+    const firstName = fullName.split(" ")[0];
   
     try {
-      const response = await fetch("https://aicademy-cjr2.onrender.com", {
+      const API_URL = process.env.REACT_APP_API_URL;
+      const response = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
