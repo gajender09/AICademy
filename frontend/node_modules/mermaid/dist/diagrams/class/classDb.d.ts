@@ -16,7 +16,7 @@ export declare class ClassDB implements DiagramDB {
     /**
      * Function called by parser when a node definition has been found.
      *
-     * @param id - Id of the class to add
+     * @param id - ID of the class to add
      * @public
      */
     addClass(_id: string): void;
@@ -108,7 +108,7 @@ export declare class ClassDB implements DiagramDB {
     /**
      * Function called by parser when a namespace definition has been found.
      *
-     * @param id - Id of the namespace to add
+     * @param id - ID of the namespace to add
      * @public
      */
     addNamespace(id: string): void;
@@ -117,8 +117,8 @@ export declare class ClassDB implements DiagramDB {
     /**
      * Function called by parser when a namespace definition has been found.
      *
-     * @param id - Id of the namespace to add
-     * @param classNames - Ids of the class to add
+     * @param id - ID of the namespace to add
+     * @param classNames - IDs of the class to add
      * @public
      */
     addClassesToNamespace(id: string, classNames: string[]): void;

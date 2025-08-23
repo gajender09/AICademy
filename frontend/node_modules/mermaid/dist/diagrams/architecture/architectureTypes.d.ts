@@ -1,4 +1,4 @@
-import type { DiagramDB } from '../../diagram-api/types.js';
+import type { DiagramDBBase } from '../../diagram-api/types.js';
 import type { ArchitectureDiagramConfig } from '../../config.type.js';
 import type { D3Element } from '../../types.js';
 import type cytoscape from 'cytoscape';
@@ -112,7 +112,7 @@ export interface ArchitectureEdge<DT = ArchitectureDirection> {
     rhsGroup?: boolean;
     title?: string;
 }
-export interface ArchitectureDB extends DiagramDB {
+export interface ArchitectureDB extends DiagramDBBase<ArchitectureDiagramConfig> {
     clear: () => void;
     addService: (service: Omit<ArchitectureService, 'edges'>) => void;
     getServices: () => ArchitectureService[];

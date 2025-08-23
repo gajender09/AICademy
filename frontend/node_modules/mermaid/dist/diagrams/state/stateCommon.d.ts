@@ -5,6 +5,7 @@ export declare const DEFAULT_DIAGRAM_DIRECTION = "TB";
 export declare const DEFAULT_NESTED_DOC_DIR = "TB";
 export declare const STMT_DIRECTION = "dir";
 export declare const STMT_STATE = "state";
+export declare const STMT_ROOT = "root";
 export declare const STMT_RELATION = "relation";
 export declare const STMT_CLASSDEF = "classDef";
 export declare const STMT_STYLEDEF = "style";
