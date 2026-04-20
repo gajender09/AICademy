@@ -10,7 +10,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://aicademy.vercel.app"
+  "https://ai-cademy.vercel.app"
 ];
 
 app.use(cors({
