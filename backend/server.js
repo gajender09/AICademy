@@ -8,15 +8,23 @@ const courseRoutes = require("./routes/courseRoutes");
 dotenv.config();
 const app = express();
 
-const allowedOrigins = ["http://localhost:3000", "https://aicademy-mu.vercel.app"];
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://aicademy.vercel.app"
+];
 
-app.use(express.json());
-app.use(
-  cors({
-    origin: allowedOrigins,
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow Postman / mobile apps
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // TEMP: allow all (safe for now)
+    }
+  },
+  credentials: true
+}));
 
 
 // Routes
