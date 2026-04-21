@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
-
 const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
@@ -36,14 +35,14 @@ const Login = () => {
       console.log("API_URL:", API_URL);
 
       const response = await fetch(`${API_URL}/api/users/login`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
-          password: password
-        })
+          password: password,
+        }),
       });
 
       const data = await response.json();
@@ -84,7 +83,10 @@ const Login = () => {
               onChange={handleChange}
               required
             />
-            <span className="toggle-password" onClick={togglePasswordVisibility}>
+            <span
+              className="toggle-password"
+              onClick={togglePasswordVisibility}
+            >
               {passwordVisible ? <AiFillEyeInvisible /> : <AiFillEye />}
             </span>
           </div>

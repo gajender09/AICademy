@@ -26,9 +26,9 @@ const Register = () => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
-  
+
     const { fullName, email, password, confirmPassword } = formData;
-  
+
     if (!fullName || !email || !password || !confirmPassword) {
       setErrorMessage("All fields are required.");
       return;
@@ -37,24 +37,24 @@ const Register = () => {
       setErrorMessage("Passwords do not match.");
       return;
     }
-  
+
     // Extract first name (split at first space)
     const firstName = fullName.split(" ")[0];
-  
+
     try {
       const API_URL = process.env.REACT_APP_API_URL;
       const response = await fetch(`${API_URL}/api/users/register`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           name: firstName, // Send only the first name
           email: email,
-          password: password
-        })
+          password: password,
+        }),
       });
-  
+
       const data = await response.json();
       console.log("Response", data);
       if (response.ok) {
@@ -72,7 +72,6 @@ const Register = () => {
       setErrorMessage("Something went wrong. Please try again.");
     }
   };
-  
 
   return (
     <div className="auth-container">
@@ -106,7 +105,10 @@ const Register = () => {
               onChange={handleChange}
               required
             />
-            <span className="toggle-password" onClick={togglePasswordVisibility}>
+            <span
+              className="toggle-password"
+              onClick={togglePasswordVisibility}
+            >
               {passwordVisible ? <AiFillEyeInvisible /> : <AiFillEye />}
             </span>
           </div>
