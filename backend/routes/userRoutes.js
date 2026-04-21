@@ -1,8 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
-
 const User = require("../models/User");
-
 const router = express.Router();
 
 // Register Route
@@ -55,6 +53,18 @@ router.post("/login", async (req, res) => {
     console.error("LOGIN ERROR:", error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+router.put("/update", async (req, res) => {
+  const { email, name, newEmail } = req.body;
+
+  const user = await User.findOneAndUpdate(
+    { email },
+    { name, email: newEmail },
+    { new: true }
+  );
+
+  res.json({ message: "Updated", user });
 });
 
 module.exports = router;
