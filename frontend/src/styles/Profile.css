@@ -1,48 +1,79 @@
 .profile-container {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 20px;
   background: linear-gradient(135deg, #0f172a, #1e293b);
   font-family: Arial, sans-serif;
 }
 
 .profile-card {
-  width: 340px;
-  padding: 25px;
-  border-radius: 15px;
+  max-width: 420px;
+  width: 100%;
+  padding: 30px;
+  border-radius: 20px;
   background: #111827;
   color: #fff;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
 }
 
 .avatar {
-  width: 70px;
-  height: 70px;
-  margin: 0 auto 15px;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 10px;
   border-radius: 50%;
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
+  font-size: 32px;
   font-weight: bold;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
-.info {
+.profile-header {
+  margin-bottom: 20px;
+}
+
+.profile-header h1 {
+  margin: 10px 0 0 0;
+  font-size: 28px;
+  background: linear-gradient(135deg, #60a5fa, #a5b4fc);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 15px;
+  margin: 20px 0;
   text-align: left;
-  margin: 15px 0;
 }
 
-.info p {
-  margin: 8px 0;
-  color: #cbd5e1;
+.detail-item {
+  background: #1f2937;
+  padding: 15px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
 
-.info span {
+.label {
   color: #60a5fa;
   font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value {
+  color: #f1f5f9;
+  font-size: 16px;
 }
 
 .input {
@@ -92,7 +123,52 @@
 }
 
 .message {
-  font-size: 12px;
-  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.message.success {
+  background: rgba(34, 197, 94, 0.2);
   color: #34d399;
+  border-left: 4px solid #10b981;
+}
+
+.message.error {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-left: 4px solid #ef4444;
+}
+
+.copy-btn {
+  background: #4f46e5;
+  border: none;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.copy-btn:hover {
+  background: #4338ca;
+}
+
+.profile-actions, .form-actions {
+  margin: 20px 0;
+}
+
+.profile-actions button, .form-actions button {
+  margin: 5px 0;
+}
+
+.edit-form {
+  margin: 20px 0;
+}
+
+.edit-form .input {
+  margin-bottom: 15px;
 }
