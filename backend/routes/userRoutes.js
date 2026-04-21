@@ -40,27 +40,54 @@ router.post("/register", async (req, res) => {
 });
 // Login Route
 router.post("/login", async (req, res) => {
+  try {
+    console.log("LOGIN BODY:", req.body);
+
+    // ✅ Validate request body
+    if (!req.body) {
+      return res.status(400).json({ message: "No data received" });
+    }
+
     const { email, password } = req.body;
 
-    try {
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ message: "User not found" });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: "Invalid credentials" });
-
-        // Return user details along with the login success message
-        return res.status(200).json({
-            message: 'Login successful',
-            user: {
-                name: user.name,       // Include the user's name
-                email: user.email,     // Include email or other details if needed
-                // Optionally include other user details like profile picture, role, etc.
-            }
-        });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password required" });
     }
+
+    // ✅ Check user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ✅ Handle both hashed + old plain passwords (important)
+    let isMatch = false;
+
+    if (user.password.startsWith("$2a$") || user.password.startsWith("$2b$")) {
+      // hashed password
+      isMatch = await bcrypt.compare(password, user.password);
+    } else {
+      // fallback for old users (plain password)
+      isMatch = password === user.password;
+    }
+
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // ✅ Success
+    return res.status(200).json({
+      message: "Login successful",
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    });
+
+  } catch (error) {
+    console.error("LOGIN ERROR:", error);
+    return res.status(500).json({ message: "Server error" });
+  }
 });
 
 
