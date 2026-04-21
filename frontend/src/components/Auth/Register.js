@@ -43,12 +43,11 @@ const Register = () => {
   
     try {
       const API_URL = process.env.REACT_APP_API_URL;
-      const response = await fetch(`${API_URL}/register`, {
+      const response = await fetch(`${API_URL}/api/users/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
         body: JSON.stringify({
           name: firstName, // Send only the first name
           email: email,
