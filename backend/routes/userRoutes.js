@@ -41,35 +41,26 @@ router.post("/register", async (req, res) => {
 // Login Route
 router.post("/login", async (req, res) => {
   try {
-    console.log("LOGIN BODY:", req.body);
-
-    // ✅ Validate request body
-    if (!req.body) {
-      return res.status(400).json({ message: "No data received" });
-    }
-
     const { email, password } = req.body;
 
+    // 🔹 Validate input
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password required" });
+      return res.status(400).json({ message: "All fields are required" });
     }
 
-    // ✅ Check user
+    // 🔹 Find user
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    // ✅ Handle both hashed + old plain passwords (important)
-    let isMatch = false;
+    // 🔹 Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    if (user.password.startsWith("$2a$") || user.password.startsWith("$2b$")) {
-      // hashed password
-      isMatch = await bcrypt.compare(password, user.password);
-    } else {
-      // fallback for old users (plain password)
-      isMatch = password === user.password;
-    }
+    // 🔥 DEBUG (keep for now)
+    console.log("Entered:", password);
+    console.log("Stored:", user.password);
+    console.log("Match:", isMatch);
 
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -86,9 +77,10 @@ router.post("/login", async (req, res) => {
 
   } catch (error) {
     console.error("LOGIN ERROR:", error);
-    return res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Server error" });
   }
 });
+
 
 
 module.exports = router;
