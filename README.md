@@ -2,6 +2,14 @@
 
 A modern and interactive platform designed to deliver personalized learning paths tailored to students' skills and preferences, powered by AI.
 
+<a href="https://ai-cademy.vercel.app" target="_blank">
+  AICademy Live Demo
+</a>
+
+<a href="https://ai-cademy.vercel.app" target="_blank">Live Demo</a>
+
+👉 [Live Demo](https://ai-cademy.vercel.app)
+
 ---
 
 ## System Design
