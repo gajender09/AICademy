@@ -8,6 +8,7 @@ import Register from "./components/Auth/Register";
 import StudentDashboard from "./components/Dashboard/StudentDashboard";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Profile from "./components/Profile";
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const MainApp = () => {
           <Route path="/dashboard" element={<StudentDashboard />} />
           <Route path="/courses" element={<CoursesPage />} />
           <Route path="/courses/:courseId" element={<CourseDetailsPage />} />
+          <Route path="/profile" element={<Profile />} />
         </Routes>
       </main>
       {/* Show footer only on Home Page */}
