@@ -30,11 +30,14 @@ const CourseDetailsPage = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
-  console.log("KEY:", GEMINI_API_KEY);
+  console.log("GEMINI API KEY:", GEMINI_API_KEY);
   const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
+  console.log("GOOGLE API KEY:", GOOGLE_API_KEY);
   const GOOGLE_CSE_ID = process.env.REACT_APP_GOOGLE_CSE_ID;
+  console.log("GOOGLE CSE ID:", GOOGLE_CSE_ID);
   const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
-  
+  console.log("YOUTUBE API KEY:", YOUTUBE_API_KEY);
+
   useEffect(() => {
     const savedCourses =
       JSON.parse(localStorage.getItem("enrolledCourses")) || [];
@@ -71,7 +74,7 @@ const CourseDetailsPage = () => {
     setModules(getFallbackModules(courseId));
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -158,7 +161,7 @@ const CourseDetailsPage = () => {
     console.log("Subtopic Prompt:", prompt);
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -340,7 +343,7 @@ const CourseDetailsPage = () => {
 
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -410,7 +413,7 @@ const CourseDetailsPage = () => {
     setRoadmap(fallbackRoadmap);
     try {
       const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`,
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
