@@ -30,10 +30,11 @@ const CourseDetailsPage = () => {
   const [isEnrolled, setIsEnrolled] = useState(false);
 
   const GEMINI_API_KEY = process.env.REACT_APP_GEMINI_API_KEY;
+  console.log("KEY:", GEMINI_API_KEY);
   const GOOGLE_API_KEY = process.env.REACT_APP_GOOGLE_API_KEY;
   const GOOGLE_CSE_ID = process.env.REACT_APP_GOOGLE_CSE_ID;
   const YOUTUBE_API_KEY = process.env.REACT_APP_YOUTUBE_API_KEY;
-
+  
   useEffect(() => {
     const savedCourses =
       JSON.parse(localStorage.getItem("enrolledCourses")) || [];
