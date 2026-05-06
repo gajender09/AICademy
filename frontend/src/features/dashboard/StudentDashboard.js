@@ -17,19 +17,38 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    if (storedUser?.name) {
-      const firstName = storedUser.name.split(" ")[0];
-      setUserName(firstName);
-    }
+    const fetchDashboardData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const API_URL = process.env.REACT_APP_API_URL || "http://localhost:3001";
+        
+        const res = await fetch(`${API_URL}/api/users/me`, {
+          headers: { "Authorization": `Bearer ${token}` }
+        });
+        const userData = await res.json();
+        
+        if (res.ok) {
+          const firstName = userData.name.split(" ")[0];
+          setUserName(firstName);
+          
+          const enhancedCourses = (userData.enrolledCourses || []).map((enrollment) => {
+            const course = enrollment.course;
+            return {
+              courseId: course?.title || "Unknown Course",
+              _id: course?._id,
+              lastActivity: new Date(enrollment.enrolledAt).toLocaleDateString(),
+              quizScore: Math.floor(Math.random() * 100),
+              completedSubtopics: enrollment.completedSubtopics || []
+            };
+          });
+          setEnrolledCourses(enhancedCourses);
+        }
+      } catch (error) {
+        console.error("Error loading dashboard data:", error);
+      }
+    };
 
-    const savedCourses = JSON.parse(localStorage.getItem("enrolledCourses")) || [];
-    const enhancedCourses = savedCourses.map((course) => ({
-      ...course,
-      lastActivity: new Date(course.lastAccessed || Date.now()).toLocaleDateString(),
-      quizScore: Math.floor(Math.random() * 100),
-    }));
-    setEnrolledCourses(enhancedCourses);
+    fetchDashboardData();
   }, []);
 
   const calculateProgress = (course) => {

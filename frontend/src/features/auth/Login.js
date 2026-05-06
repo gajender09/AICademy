@@ -49,8 +49,13 @@ const Login = () => {
 
       if (response.ok) {
         setSuccessMessage("Login successful!");
+        localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        window.location.href = "/dashboard";
+        
+        // Use a short delay for success message visibility
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1500);
       } else {
         setErrorMessage(data.message || "Invalid email or password.");
       }
@@ -62,7 +67,8 @@ const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Login</h2>
+        <h2>Welcome Back</h2>
+        <p>Login to continue your learning journey</p>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
         <form className="auth-form" onSubmit={handleSubmit}>

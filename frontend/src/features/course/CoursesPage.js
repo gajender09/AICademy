@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "../styles/CoursesPage.css";
+import "../../styles/CoursesPage.css";
 
 const CoursesPage = () => {
   const [keywords, setKeywords] = useState("");
@@ -10,28 +10,47 @@ const CoursesPage = () => {
   // Check if user is logged in
   const isAuthenticated = localStorage.getItem("user");
 
-  const handleGenerateCourse = () => {
-    if (!isAuthenticated) {
-      navigate("/login"); // Redirect to login if not logged in
-      return;
+  const handleGenerateCourse = async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  if (!keywords.trim()) {
+    alert("Please enter a topic!");
+    return;
+  }
+
+  try {
+    const COURSE_API = process.env.REACT_APP_COURSE_API;
+
+const response = await fetch(`${COURSE_API}/api/courses/generate`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+    Authorization: localStorage.getItem("token"),
+  },
+  body: JSON.stringify({ courseId: keywords }),
+});
+
+    const data = await response.json();
+
+    if (response.ok) {
+      setCourses((prev) => [...prev, data]);
+      setKeywords("");
+
+      navigate(`/courses/${data.courseId}`); // ✅ FIXED
+    } else {
+      console.error("API ERROR:", data);
+      alert(data.error || data.message);
     }
-
-    if (!keywords.trim()) {
-      alert("Please enter a topic!");
-      return;
-    }
-
-    // Simulating AI-generated course data
-    const newCourse = {
-      id: Date.now(),
-      title: keywords.toUpperCase(),
-      description: `Comprehensive learning path for ${keywords}`,
-      image: `https://source.unsplash.com/300x200/?${keywords},technology`, // Random relevant image
-    };
-
-    setCourses([...courses, newCourse]);
-    setKeywords("");
-  };
+  } catch (error) {
+    console.error("FETCH ERROR:", error);
+    alert("Network error");
+  }
+};
 
   return (
     <div className="courses-container">

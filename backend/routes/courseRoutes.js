@@ -1,23 +1,21 @@
 const express = require("express");
-const Course = require("../models/Course");
-
 const router = express.Router();
 
-// Fetch all courses
-router.get("/courses", async (req, res) => {
-  try {
-    const courses = await Course.find();
-    res.json(courses);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+const protect = require("../middleware/authMiddleware");
 
-// Enroll in a course
-router.post("/enroll", async (req, res) => {
-  const { userId, courseId } = req.body;
-  // You can store enrollment info in the user schema
-  res.json({ message: "Enrolled successfully" });
-});
+const {
+  generateCourse,
+  getSubtopicContent,
+  getQuiz,
+} = require("../controllers/courseController");
+
+/* MAIN */
+router.post("/generate", protect, generateCourse);
+
+/* LAZY */
+router.post("/subtopic", protect, getSubtopicContent);
+
+/* QUIZ */
+router.post("/quiz", protect, getQuiz);
 
 module.exports = router;

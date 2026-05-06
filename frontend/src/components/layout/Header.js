@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FaUserCircle } from 'react-icons/fa'; // Profile icon
-import '../styles/global.css';
+import '../../styles/global.css';
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -11,12 +11,15 @@ const Header = () => {
   useEffect(() => {
     // Check if user is registered
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    if (storedUser && storedUser !== "undefined") {
       try {
         const parsedUser = JSON.parse(storedUser);
-        setUserName(parsedUser.name);
+        if (parsedUser && parsedUser.name) {
+          setUserName(parsedUser.name);
+        }
       } catch (error) {
         console.error('Error parsing user data', error);
+        localStorage.removeItem('user');
       }
     }
   }, []);
@@ -31,6 +34,7 @@ const Header = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     setUserName(null);
     setShowDropdown(false);
     window.location.href = '/';
@@ -40,7 +44,7 @@ const Header = () => {
     <header>
       <div className="logo">
         <Link to="/" className="logo-link">
-          <img src={require('../assests/images/logo.png')} alt="AICADEMY Logo" className="logo-image" />
+          <img src={require('../../assests/images/logo.png')} alt="AICADEMY Logo" className="logo-image" />
           <span className="logo-text">AICADEMY</span>
         </Link>
       </div>

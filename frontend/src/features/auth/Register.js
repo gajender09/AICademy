@@ -59,12 +59,12 @@ const Register = () => {
       console.log("Response", data);
       if (response.ok) {
         setSuccessMessage(`Registration successful! Welcome, ${firstName}.`);
-        setFormData({
-          fullName: "",
-          email: "",
-          password: "",
-          confirmPassword: "",
-        });
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+
+        setTimeout(() => {
+          window.location.href = "/dashboard";
+        }, 1500);
       } else {
         setErrorMessage(data.message || "Registration failed.");
       }
@@ -76,7 +76,8 @@ const Register = () => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <h2>Register</h2>
+        <h2>Create Account</h2>
+        <p>Join AICademy and start mastering AI today</p>
         {errorMessage && <p className="error-message">{errorMessage}</p>}
         {successMessage && <p className="success-message">{successMessage}</p>}
         <form className="auth-form" onSubmit={handleSubmit}>

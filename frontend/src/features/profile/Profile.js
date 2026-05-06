@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "../styles/Profile.css";
+import "../../styles/Profile.css";
 
 const Profile = () => {
   const [user, setUser] = useState(null);
@@ -12,11 +12,16 @@ const Profile = () => {
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
 
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setUser(parsed);
-      setForm({ name: parsed.name || "", email: parsed.email || "" });
-      setJoinedDate(parsed.joinedDate || new Date().toLocaleDateString());
+    if (storedUser && storedUser !== "undefined") {
+      try {
+        const parsed = JSON.parse(storedUser);
+        setUser(parsed);
+        setForm({ name: parsed.name || "", email: parsed.email || "" });
+        setJoinedDate(parsed.joinedDate || new Date().toLocaleDateString());
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+        localStorage.removeItem("user");
+      }
     }
   }, []);
 
@@ -49,12 +54,14 @@ const Profile = () => {
       setLoading(true);
       setMessage("");
 
+      const token = localStorage.getItem("token");
       const res = await fetch(
         "https://aicademy-cjr2.onrender.com/api/users/update",
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
           body: JSON.stringify({
             email: user.email,
@@ -89,6 +96,7 @@ const Profile = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
     window.location.href = "/login";
   };
 
