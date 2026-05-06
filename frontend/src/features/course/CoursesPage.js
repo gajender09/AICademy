@@ -24,24 +24,23 @@ const CoursesPage = () => {
   }
 
   try {
-    const COURSE_API = process.env.REACT_APP_COURSE_API;
+    const COURSE_API = "https://aicademy-bpk8.onrender.com";
 
-const response = await fetch(`${COURSE_API}/api/courses/generate`, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-    Authorization: localStorage.getItem("token"),
-  },
-  body: JSON.stringify({ courseId: keywords }),
-});
+    const response = await fetch(`${COURSE_API}/api/courses/generate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // ✅ FIXED
+      },
+      body: JSON.stringify({ courseId: keywords }),
+    });
 
     const data = await response.json();
 
     if (response.ok) {
       setCourses((prev) => [...prev, data]);
       setKeywords("");
-
-      navigate(`/courses/${data.courseId}`); // ✅ FIXED
+      navigate(`/courses/${data.courseId}`);
     } else {
       console.error("API ERROR:", data);
       alert(data.error || data.message);

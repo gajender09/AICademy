@@ -51,26 +51,29 @@ exports.generateCourse = async (req, res) => {
     const { courseId } = req.body;
     const userId = req.user.id;
 
-    // ✅ CACHE
+    console.log("COURSE ID:", courseId);
+    console.log("USER ID:", userId);
+
     let existing = await Course.findOne({ userId, courseId });
-    if (existing) return res.json(existing);
+    if (existing) {
+      console.log("CACHE HIT");
+      return res.json(existing);
+    }
 
-    const prompt = `
-Generate structured course for "${courseId}"
-
-Format:
-Chapter 1: Title
-- 1.1 Subtopic
-- 1.2 Subtopic
-(10 chapters, 4-5 subtopics each)
-`;
+    const prompt = `Generate structured course for "${courseId}"...`;
 
     const response = await axios.post(GEMINI_URL, {
       contents: [{ parts: [{ text: prompt }] }],
     });
 
+    console.log("GEMINI RESPONSE:", JSON.stringify(response.data));
+
     const raw =
-      response.data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+      response.data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+
+    if (!raw) {
+      return res.status(500).json({ error: "Empty AI response" });
+    }
 
     const modules = parseModules(raw);
 
@@ -82,7 +85,10 @@ Chapter 1: Title
 
     res.json(course);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("GEN COURSE ERROR:", err.response?.data || err.message);
+    res.status(500).json({
+      error: err.response?.data || err.message,
+    });
   }
 };
 
