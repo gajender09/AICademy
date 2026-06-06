@@ -1,0 +1,245 @@
+/* =============================================
+   AICADEMY FOOTER — Retro-Modern Theme
+   Palette: Forest Green · Warm Cream · Parchment
+   Fonts: Fraunces (display) + DM Sans + DM Mono
+============================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,400&family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+/* ── BASE ── */
+.footer {
+  position: relative;
+  overflow: hidden;
+  font-family: var(--fb);
+}
+
+/* ── HUGE BG TEXT ── */
+.footer-bg-text {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--fd);
+  font-size: clamp(100px, 16vw, 280px);
+  font-weight: 900;
+  letter-spacing: -10px;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* ── CONTAINER ── */
+.footer-container {
+  position: relative;
+  z-index: 2;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 80px 6% 0;
+}
+
+/* ── TOP SECTION ── */
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 80px;
+  padding-bottom: 60px;
+}
+
+/* ── BRAND ── */
+.footer-brand {
+  max-width: 440px;
+}
+
+.footer-brand h2 {
+  font-family: var(--fd);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  margin-bottom: 18px;
+  line-height: 1;
+}
+
+.footer-brand h2 em {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.footer-brand p {
+  font-size: 14.5px;
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+/* ── BRAND TAG CHIPS ── */
+.footer-brand-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-tag {
+  font-family: var(--fm);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  border-radius: 999px;
+  padding: 5px 13px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+/* ── LINKS SECTION ── */
+.footer-links {
+  display: flex;
+  gap: 60px;
+  justify-content: flex-end;
+}
+
+.footer-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footer-column span {
+  font-family: var(--fm);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.footer-column a {
+  font-size: 14px;
+  font-weight: 400;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color 0.2s, transform 0.2s;
+  width: fit-content;
+}
+
+.footer-column a::before {
+  content: "→";
+  font-size: 11px;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.footer-column a:hover {
+  transform: translateX(4px);
+}
+.footer-column a:hover::before {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── DIVIDER ── */
+.footer-divider {
+  height: 1px;
+  margin: 0;
+}
+
+/* ── BOTTOM SECTION ── */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 0 40px;
+  gap: 24px;
+}
+
+.footer-bottom p {
+  font-family: var(--fm);
+  font-size: 12px;
+  letter-spacing: 0.3px;
+}
+
+/* ── SOCIALS ── */
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-socials a {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  border: 1px solid;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.footer-socials a:hover {
+  transform: translateY(-2px);
+}
+
+/* ── BOTTOM ACCENT LINE ── */
+.footer-accent {
+  height: 3px;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 980px) {
+  .footer-top {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+
+  .footer-links {
+    justify-content: flex-start;
+    gap: 50px;
+  }
+
+  .footer-brand {
+    max-width: 100%;
+  }
+
+  .footer-bg-text {
+    font-size: 120px;
+    letter-spacing: -6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    padding: 60px 5% 0;
+  }
+
+  .footer-brand h2 {
+    font-size: 34px;
+    letter-spacing: -1.5px;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .footer-bg-text {
+    font-size: 80px;
+    letter-spacing: -4px;
+  }
+}
+
+@media (max-width: 520px) {
+  .footer-links {
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .footer-bg-text {
+    font-size: 56px;
+    letter-spacing: -2px;
+  }
+}

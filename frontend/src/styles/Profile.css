@@ -1,0 +1,282 @@
+/* ─────────────────────────────
+   PROFILE — AICademy Theme
+───────────────────────────── */
+
+.profile-page {
+  position: relative;
+  width: 100%;
+}
+
+/* ───────── WRAPPER ───────── */
+.profile-wrapper {
+  max-width: 860px;
+  margin: auto;
+}
+
+/* ───────── TOP SECTION ───────── */
+.profile-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding-bottom: 32px;
+  border-bottom: 1.5px solid var(--cream-3);
+}
+
+/* AVATAR */
+.profile-avatar {
+  width: 90px;
+  height: 90px;
+  border-radius: var(--r-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 800;
+
+  color: var(--cream);
+  background: var(--forest);
+
+  box-shadow: 6px 6px 0 var(--cream-3);
+}
+
+/* USER INFO */
+.profile-user-info h1 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  color: var(--forest-display);
+  letter-spacing: -1px;
+  margin-bottom: 8px;
+}
+
+.profile-user-info p {
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* EDIT BUTTON */
+.edit-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 18px;
+  border-radius: var(--r-sm);
+
+  border: 1.5px solid var(--cream-3);
+  background: var(--parchment);
+
+  color: var(--forest);
+  font-weight: 600;
+
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.edit-profile-btn:hover {
+  background: var(--cream-2);
+}
+
+/* ───────── MESSAGE ───────── */
+.profile-message {
+  margin-top: 20px;
+  padding: 14px 16px;
+
+  border-radius: var(--r-md);
+
+  background: var(--forest-lt);
+  border: 1px solid var(--forest-2);
+
+  color: var(--forest);
+  font-size: 13px;
+}
+
+/* ───────── CONTENT ───────── */
+.profile-content {
+  padding: 40px 0 10px;
+}
+
+/* ROW */
+.profile-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 20px 0;
+  border-bottom: 1px solid var(--cream-3);
+}
+
+.profile-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.profile-value {
+  color: var(--forest);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* EMAIL */
+.email-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.copy-btn {
+  width: 34px;
+  height: 34px;
+
+  border-radius: var(--r-sm);
+  border: 1px solid var(--cream-3);
+
+  background: var(--parchment);
+  color: var(--forest);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  cursor: pointer;
+}
+
+.copy-btn:hover {
+  background: var(--cream-2);
+}
+
+/* ───────── EDIT SECTION ───────── */
+.edit-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.input-group label {
+  color: var(--ink-2);
+  font-size: 13px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--cream-3);
+
+  background: var(--parchment);
+  color: var(--ink);
+
+  font-size: 14px;
+  outline: none;
+}
+
+.input-group input:focus {
+  border-color: var(--forest-2);
+  box-shadow: 0 0 0 3px rgba(44,106,79,0.12);
+}
+
+/* ACTIONS */
+.edit-actions {
+  display: flex;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+.save-btn {
+  background: var(--forest);
+  color: var(--cream);
+
+  padding: 12px 20px;
+  border-radius: var(--r-sm);
+
+  border: none;
+  cursor: pointer;
+
+  font-weight: 600;
+  box-shadow: 3px 3px 0 var(--forest-2);
+}
+
+.save-btn:hover {
+  transform: translate(-2px, -2px);
+}
+
+.cancel-btn {
+  background: var(--parchment);
+  border: 1.5px solid var(--cream-3);
+
+  color: var(--ink-2);
+  padding: 12px 20px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: var(--cream-2);
+}
+
+/* ───────── LOGOUT ───────── */
+.profile-bottom {
+  padding-top: 40px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 12px 18px;
+  border-radius: var(--r-sm);
+
+  border: 1.5px solid var(--cream-3);
+  background: var(--parchment);
+
+  color: #b91c1c;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: var(--terra-lt);
+}
+
+/* ───────── RESPONSIVE ───────── */
+@media (max-width: 768px) {
+  .profile-top {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-user-info h1 {
+    font-size: 28px;
+  }
+
+  .profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+
+  .profile-bottom {
+    justify-content: flex-start;
+  }
+}

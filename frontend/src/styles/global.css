@@ -1,0 +1,155 @@
+/* src/styles/global.css */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  font-family:var(--font-body), 'Inter', sans-serif;
+}
+
+a{
+  text-decoration:none;
+}
+
+button,
+input,
+textarea{
+  font-family:'Inter',sans-serif;
+}
+
+button{
+  cursor:pointer;
+}
+
+img{
+  max-width:100%;
+  display:block;
+}
+
+ul{
+  list-style:none;
+}
+
+/* COMMON CONTAINER */
+
+.container{
+  width:100%;
+  max-width:1280px;
+  margin:auto;
+}
+
+/* CUSTOM SCROLLBAR */
+
+::-webkit-scrollbar{
+  width:10px;
+}
+
+/* scrollbar + selection live in theme.css */
+
+/* REUSABLE SECTION */
+
+.section-tag{
+  font-size:13px;
+
+  letter-spacing:2px;
+
+  color:#818cf8;
+
+  text-transform:uppercase;
+}
+
+.section-title{
+  font-size:56px;
+
+  line-height:1.1;
+
+  letter-spacing:-2px;
+
+  font-weight:800;
+}
+
+.section-description{
+  color:var(--muted);
+
+  line-height:1.9;
+
+  font-size:17px;
+}
+
+/* REUSABLE BUTTONS */
+
+.primary-btn,
+.secondary-btn{
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:12px;
+
+  border:none;
+
+  transition:0.3s ease;
+
+  font-weight:600;
+}
+
+.primary-btn{
+  padding:18px 30px;
+
+  border-radius:18px;
+
+  color:white;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--secondary)
+    );
+
+  box-shadow:
+    0 20px 40px rgba(99,102,241,0.25);
+}
+
+.primary-btn:hover{
+  transform:translateY(-3px);
+}
+
+.secondary-btn{
+  padding:18px 28px;
+
+  border-radius:18px;
+
+  color:white;
+
+  background:
+    rgba(255,255,255,0.04);
+
+  border:
+    1px solid rgba(255,255,255,0.06);
+}
+
+.secondary-btn:hover{
+  background:
+    rgba(255,255,255,0.08);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:768px){
+
+  .section-title{
+    font-size:38px;
+  }
+
+  .section-description{
+    font-size:15px;
+  }
+}

@@ -1,0 +1,420 @@
+/* ======================================================
+   PRODUCT DEMO — Native to AICademy Design System
+   Palette: Cream · Forest · Parchment (matches homepage)
+====================================================== */
+
+/* ── Section ── */
+.hp-demo-section {
+  position: relative;
+  padding: 100px 6%;
+  background: var(--cream);
+  border-top: 1.5px solid var(--cream-3);
+  border-bottom: 1.5px solid var(--cream-3);
+  overflow: hidden;
+}
+
+/* Soft forest glow blobs — matches hp-hero & hp-cta */
+.hp-demo-section::before,
+.hp-demo-section::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+}
+.hp-demo-section::before {
+  top: -80px; right: -60px;
+  width: 380px; height: 380px;
+  background: radial-gradient(circle, var(--glow-forest) 0%, transparent 70%);
+}
+.hp-demo-section::after {
+  bottom: -100px; left: -60px;
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, var(--glow-forest-soft) 0%, transparent 70%);
+}
+
+.hp-demo-container {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Header — mirrors .hp-section-head exactly ── */
+.hp-demo-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 56px;
+}
+
+/* Reuse .hp-section-tag from homepage — just add to the element */
+/* If you can't reuse the class, copy the rule: */
+.hp-demo-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--forest-2);
+  border: 1px solid var(--forest-2);
+  border-radius: 999px;
+  padding: 4px 14px;
+  margin-bottom: 16px;
+}
+
+.hp-demo-header h2 {
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  color: var(--forest-display);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+
+.hp-demo-header h2 em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--forest-2);
+}
+
+.hp-demo-header p {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ── Scene (perspective root) ── */
+.hp-demo-scene {
+  position: relative;
+  perspective: 1200px;
+}
+
+/* Scroll-enter reveal — same cubic-bezier as your --ease */
+@keyframes demoReveal {
+  from {
+    opacity: 0;
+    transform: translateY(48px) rotateX(8deg) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg) scale(1);
+  }
+}
+
+.hp-demo-scene.is-revealed {
+  animation: demoReveal 1s var(--ease) both;
+}
+
+/* ── Card shell — matches demo-shell from hero ── */
+.hp-demo-video-wrapper {
+  position: relative;
+  background: var(--parchment);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-xl);
+  overflow: hidden;
+
+  /* Identical offset shadow to .demo-shell */
+  box-shadow:
+    8px 8px 0 var(--cream-3),
+    16px 16px 0 rgba(0, 0, 0, 0.05);
+
+  transform-style: preserve-3d;
+  will-change: transform;
+
+  transition:
+    transform 0.55s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+
+.hp-demo-video-wrapper:hover {
+  box-shadow:
+    10px 10px 0 var(--cream-3),
+    20px 20px 0 rgba(0, 0, 0, 0.08);
+}
+
+/* ── macOS-style title bar — identical to .demo-bar ── */
+.hp-demo-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--cream-2);
+  border-bottom: 1.5px solid var(--cream-3);
+  position: relative;
+  z-index: 4;
+}
+
+.hp-demo-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.hp-demo-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.hp-demo-dot--r { background: #ff6057; }
+.hp-demo-dot--y { background: #ffbe2f; }
+.hp-demo-dot--g { background: #28c840; }
+
+.hp-demo-bar-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-3);
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+/* ── GitHub-style top fade overlay ── */
+.hp-demo-video-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 200px;
+  z-index: 3;
+  pointer-events: none;
+
+  /* Fades from your exact --cream (same as hp-hero ::before logic) */
+  background: linear-gradient(
+    to bottom,
+    var(--cream)  0%,
+    rgba(250,248,241, 0.92) 28%,
+    rgba(250,248,241, 0.48) 58%,
+    transparent   100%
+  );
+
+  transition: opacity 0.3s ease;
+}
+
+/* Fade recedes on hover to reveal video top */
+.hp-demo-video-wrapper:hover::before {
+  opacity: 0.4;
+}
+
+/* Dark mode override */
+[data-theme="dark"] .hp-demo-video-wrapper::before {
+  background: linear-gradient(
+    to bottom,
+    var(--bg)  0%,
+    rgba(17, 17, 17, 0.92) 28%,
+    rgba(17, 17, 17, 0.45) 58%,
+    transparent   100%
+  );
+}
+
+/* ── Scan-line shimmer — fires once on .is-scanned ── */
+.hp-demo-scan {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--forest-2) 40%,
+    var(--forest-3) 60%,
+    transparent 100%
+  );
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0);
+}
+
+@keyframes scanSlide {
+  0%   { opacity: 0;   transform: translateY(0); }
+  6%   { opacity: 0.7; }
+  94%  { opacity: 0.35; }
+  100% { opacity: 0;   transform: translateY(340px); }
+}
+
+.hp-demo-video-wrapper.is-scanned .hp-demo-scan {
+  animation: scanSlide 1.8s 0.3s ease-in-out both;
+}
+
+/* ── Video ── */
+.hp-demo-video {
+  width: 100%;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Chip strip — matches .hp-chip / .demo-chapters feel ── */
+.hp-demo-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  background: var(--cream-2);
+  border-top: 1.5px solid var(--cream-3);
+  position: relative;
+  z-index: 4;
+}
+
+.hp-demo-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--forest);
+  background: var(--forest-lt);
+  border: 1px solid var(--forest-2);
+  border-radius: 999px;
+  padding: 4px 12px;
+
+  /* Staggered float in */
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+
+  /* Continuous subtle float (after reveal) */
+  animation: chipFloat 3s ease-in-out infinite alternate paused;
+}
+
+.hp-demo-video-wrapper.is-scanned .hp-demo-chip {
+  opacity: 1;
+  transform: translateY(0);
+  animation-play-state: running;
+}
+
+.hp-demo-chips .hp-demo-chip:nth-child(1) { transition-delay: 0.5s; animation-delay: 0s; }
+.hp-demo-chips .hp-demo-chip:nth-child(2) { transition-delay: 0.65s; animation-delay: -0.8s; }
+.hp-demo-chips .hp-demo-chip:nth-child(3) { transition-delay: 0.8s; animation-delay: -1.6s; }
+
+@keyframes chipFloat {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-4px); }
+}
+
+.hp-demo-chip-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--forest-3);
+  flex-shrink: 0;
+}
+
+.hp-demo-chip-dot--live {
+  background: #28c840;
+  box-shadow: 0 0 5px #28c840;
+  animation: liveBlink 2s ease-in-out infinite;
+}
+
+@keyframes liveBlink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── Controls ── */
+.hp-demo-controls {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: flex;
+  gap: 8px;
+  z-index: 10;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.hp-demo-video-wrapper:hover .hp-demo-controls {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.hp-demo-control-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  /* On-brand: cream bg + forest border — same as .demo-gen-btn feel */
+  border: 1.5px solid var(--cream-3);
+  background: rgba(250, 248, 241, 0.88);
+  backdrop-filter: blur(10px);
+  color: var(--forest);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.18s ease;
+}
+
+.hp-demo-control-btn:hover {
+  background: var(--forest-lt);
+  border-color: var(--forest-2);
+  transform: scale(1.08);
+}
+
+/* Dark mode controls */
+[data-theme="dark"] .hp-demo-control-btn {
+  background: rgba(15, 45, 30, 0.88);
+  border-color: var(--forest-2);
+  color: var(--forest-3);
+}
+[data-theme="dark"] .hp-demo-control-btn:hover {
+  background: var(--forest-lt);
+}
+
+/* Pulse ring on play button — mirrors demo-spinner rhythm */
+.hp-demo-control-btn--play {
+  position: relative;
+}
+
+.hp-demo-control-btn--play::after {
+  content: "";
+  position: absolute;
+  inset: -7px;
+  border-radius: 50%;
+  border: 1px solid var(--forest-2);
+  opacity: 0;
+  animation: ctrlPulse 2.4s ease-out infinite;
+  pointer-events: none;
+}
+
+@keyframes ctrlPulse {
+  0%   { transform: scale(1);    opacity: 0.6; }
+  100% { transform: scale(1.65); opacity: 0; }
+}
+
+/* ── Dark mode card ── */
+[data-theme="dark"] .hp-demo-video-wrapper {
+  border-color: rgba(255, 255, 255, 0.07);
+  background: #111;
+  box-shadow:
+    8px 8px 0 rgba(0, 0, 0, 0.4),
+    16px 16px 0 rgba(0, 0, 0, 0.25);
+}
+[data-theme="dark"] .hp-demo-video-wrapper:hover {
+  box-shadow:
+    10px 10px 0 rgba(0, 0, 0, 0.5),
+    20px 20px 0 rgba(0, 0, 0, 0.3);
+}
+[data-theme="dark"] .hp-demo-bar,
+[data-theme="dark"] .hp-demo-chips {
+  background: #0a1a10;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+[data-theme="dark"] .hp-demo-chip {
+  background: rgba(45, 106, 79, 0.15);
+  border-color: rgba(45, 106, 79, 0.4);
+  color: var(--forest-3);
+}
+
+/* ── Mobile ── */
+@media (max-width: 768px) {
+  .hp-demo-section { padding: 70px 5%; }
+  .hp-demo-video-wrapper { border-radius: var(--r-lg); }
+  .hp-demo-chips { gap: 6px; }
+  .hp-demo-controls { right: 10px; bottom: 10px; }
+  .hp-demo-control-btn { width: 36px; height: 36px; }
+}

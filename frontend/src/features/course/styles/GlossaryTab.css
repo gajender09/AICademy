@@ -1,0 +1,185 @@
+@import "./RoadmapTab.css";
+
+.glossary-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  background: var(--cream);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-md);
+}
+
+.glossary-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+  padding: 8px 12px;
+  background: var(--parchment);
+  border: 1.5px solid var(--cream-3);
+  border-radius: 999px;
+}
+
+.glossary-search svg {
+  color: var(--forest);
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+.glossary-search input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  color: var(--ink-2);
+  outline: none;
+}
+
+.glossary-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--forest);
+  white-space: nowrap;
+}
+
+.glossary-toolbar-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.glossary-no-results {
+  padding: 24px;
+  text-align: center;
+  color: var(--ink-2);
+  font-size: 14px;
+  background: var(--cream);
+  border-radius: var(--r-md);
+  border: 1px dashed var(--cream-3);
+}
+
+.glossary-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.glossary-group {
+  background: var(--cream);
+  border: 1.5px solid var(--cream-3);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.glossary-group-title {
+  margin: 0;
+  padding: 12px 16px;
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cream);
+  background: var(--forest);
+}
+
+.glossary-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.glossary-item {
+  border-bottom: 1px solid var(--cream-3);
+}
+
+.glossary-item:last-child {
+  border-bottom: none;
+}
+
+.glossary-item-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  background: var(--parchment);
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s ease;
+}
+
+.glossary-item-head:hover {
+  background: #eef5f1;
+}
+
+.glossary-item-head svg {
+  flex-shrink: 0;
+  font-size: 12px;
+  color: var(--forest);
+  transition: transform 0.2s ease;
+}
+
+.glossary-chevron--closed {
+  transform: rotate(-90deg);
+}
+
+.glossary-term {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--forest);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.glossary-item-body {
+  padding: 0 16px 14px 42px;
+  background: var(--parchment);
+  animation: glossary-open 0.2s ease;
+}
+
+.glossary-item-body p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@keyframes glossary-open {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 760px) {
+  .glossary-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .glossary-search {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .glossary-toolbar-actions {
+    width: 100%;
+  }
+
+  .glossary-item-body {
+    padding-left: 16px;
+  }
+}

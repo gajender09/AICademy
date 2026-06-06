@@ -1,0 +1,30 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <script>
+    (function () {
+      var t = localStorage.getItem("theme");
+      document.documentElement.setAttribute(
+        "data-theme",
+        t === "dark" || t === "light" ? t : "light"
+      );
+    })();
+  </script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="icon" type="image/png" href="%PUBLIC_URL%/tab-logo1.png" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <title>AICADEMY</title>
+</head>
+
+<body>
+  <div id="root"></div> <!-- This is where the React app gets mounted -->
+</body>
+
+</html>
