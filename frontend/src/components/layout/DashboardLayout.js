@@ -54,6 +54,7 @@ const DashboardLayout = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [courses, setCourses] = useState([]);
   const [user, setUser] = useState(null);
+  const [usage, setUsage] = useState(null);
   const [lastQuiz, setLastQuiz] = useState(null);
   const [activitySummary, setActivitySummary] = useState(emptySummary);
   const [recentActivity, setRecentActivity] = useState([]);
@@ -116,13 +117,31 @@ const DashboardLayout = () => {
 
       await Promise.allSettled([
         safeFetch(`${API_URL}/api/users/me`, (data) => setUser(data.user || data)),
-        safeFetch(`${API_URL}/api/courses/dashboard`, (data) => setCourses(data.courses || [])),
-        safeFetch(`${API_URL}/api/courses/activity/summary?year=${currentYear}`, (data) => {
-          setActivitySummary({ ...emptySummary, ...data });
-          if (!year) setSelectedYear(data.year || currentYear);
-        }),
-        safeFetch(`${API_URL}/api/courses/quiz/last`, (data) => setLastQuiz(data)),
-        safeFetch(`${API_URL}/api/courses/activity/recent`, (data) => setRecentActivity(data.activities || [])),
+      
+        safeFetch(`${API_URL}/api/courses/dashboard`, (data) =>
+          setCourses(data.courses || [])
+        ),
+      
+        safeFetch(
+          `${API_URL}/api/courses/usage`,
+          (data) => setUsage(data)
+        ),
+      
+        safeFetch(
+          `${API_URL}/api/courses/activity/summary?year=${currentYear}`,
+          (data) => {
+            setActivitySummary({ ...emptySummary, ...data });
+            if (!year) setSelectedYear(data.year || currentYear);
+          }
+        ),
+      
+        safeFetch(`${API_URL}/api/courses/quiz/last`, (data) =>
+          setLastQuiz(data)
+        ),
+      
+        safeFetch(`${API_URL}/api/courses/activity/recent`, (data) =>
+          setRecentActivity(data.activities || [])
+        ),
       ]);
 
       if (!silent && !sessionExpired) setLoading(false);
@@ -153,6 +172,7 @@ const DashboardLayout = () => {
     () => ({
       courses,
       user,
+      usage,
       lastQuiz,
       activitySummary,
       recentActivity,
@@ -161,7 +181,7 @@ const DashboardLayout = () => {
       setSelectedYear,
       fetchDashboardData,
     }),
-    [courses, user, lastQuiz, activitySummary, recentActivity, loading, selectedYear, fetchDashboardData]
+    [courses, user, usage, lastQuiz, activitySummary, recentActivity, loading, selectedYear, fetchDashboardData]
   );
 
   return (

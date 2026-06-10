@@ -1,3 +1,7 @@
+const User = require("../models/User");
+const { FREE_ACTIVE_COURSE_LIMIT } =
+  require("../config/limits");
+
 const Course = require("../models/Course");
 const mongoose = require("mongoose");
 const axios = require("axios");
@@ -100,11 +104,11 @@ const buildHeatmap = (activities, year) => {
   }
 
   const activeDays = new Set([...counts.keys()]);
-  
+
   let currentStreak = 0;
   const today = new Date();
   today.setUTCHours(0, 0, 0, 0);
-  
+
   const streakCursor = year === today.getUTCFullYear() ? new Date(today) : new Date(end);
   while (activeDays.has(toDateKey(streakCursor))) {
     currentStreak += 1;
@@ -221,9 +225,9 @@ exports.generateQuiz = async (req, res) => {
     const quizContext =
       scope === "module"
         ? module.chapters
-            .map((ch, index) => `Chapter ${index + 1}: ${ch.title}\n${ch.content || ""}`)
-            .join("\n\n")
-            .slice(0, 8000)
+          .map((ch, index) => `Chapter ${index + 1}: ${ch.title}\n${ch.content || ""}`)
+          .join("\n\n")
+          .slice(0, 8000)
         : chapterContent || chapter.content || "";
 
     const quizTitle =
@@ -571,6 +575,26 @@ exports.enrollCourse = async (req, res) => {
 
     if (!title) {
       return res.status(400).json({ message: "Title is required" });
+    }
+
+    const user = await User.findById(req.user._id);
+
+    const activeCourses =
+      await Course.countDocuments({
+        user: req.user._id,
+      });
+
+    if (
+      user.plan === "free" &&
+      activeCourses >= FREE_ACTIVE_COURSE_LIMIT
+    ) {
+      return res.status(403).json({
+        success: false,
+        code: "COURSE_LIMIT_REACHED",
+        limit: FREE_ACTIVE_COURSE_LIMIT,
+        message:
+          "You have reached your free plan course limit.",
+      });
     }
 
     const slug = await generateUniqueSlug(title);
@@ -1072,9 +1096,9 @@ const findCourseImage = async (courseTitle) => {
 
     const image = result
       ? {
-          imageUrl: result.thumbnail || result.original,
-          imageSource: cleanText(result.source || result.title || "Google Images"),
-        }
+        imageUrl: result.thumbnail || result.original,
+        imageSource: cleanText(result.source || result.title || "Google Images"),
+      }
       : null;
 
     setCache(cacheKey, image);
@@ -1133,10 +1157,10 @@ const durationToSeconds = (duration = "") => {
 const normalizeResourceQuery = (courseTitle, moduleTitle, chapters = []) => {
   const chapterTerms = Array.isArray(chapters)
     ? chapters
-        .map((chapter) => cleanText(chapter?.title || chapter))
-        .filter(Boolean)
-        .slice(0, 3)
-        .join(" ")
+      .map((chapter) => cleanText(chapter?.title || chapter))
+      .filter(Boolean)
+      .slice(0, 3)
+      .join(" ")
     : "";
 
   return cleanText(`${courseTitle} ${moduleTitle} ${chapterTerms}`);
@@ -1537,8 +1561,8 @@ exports.getRecentActivity = async (req, res) => {
 
     const formatted = activities.map(act => ({
       description: act.description,
-      time: new Date(act.timestamp).toLocaleDateString('en-IN', { 
-        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' 
+      time: new Date(act.timestamp).toLocaleDateString('en-IN', {
+        month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
       }),
       type: act.type,
       course: act.course ? act.course.title : null,
@@ -1560,11 +1584,11 @@ exports.getLastQuiz = async (req, res) => {
       .populate('course', 'title');
 
     if (!lastQuiz) {
-      return res.json({ 
-        score: 0, 
-        chapter: "No quiz yet", 
-        course: "—", 
-        courseId: null 
+      return res.json({
+        score: 0,
+        chapter: "No quiz yet",
+        course: "—",
+        courseId: null
       });
     }
 
@@ -1584,9 +1608,9 @@ exports.getLastQuiz = async (req, res) => {
 exports.getRecommendations = async (req, res) => {
   try {
     // Using your existing Course model (per user)
-    const userCourses = await Course.find({ 
+    const userCourses = await Course.find({
       user: req.user._id,
-      progress: { $lt: 100 } 
+      progress: { $lt: 100 }
     }).sort({ progress: -1, createdAt: -1 }).limit(6);
 
     const recommendations = [];
@@ -1603,17 +1627,17 @@ exports.getRecommendations = async (req, res) => {
     } else {
       // Fallback recommendations
       recommendations.push(
-        { 
-          title: "Advanced JavaScript Concepts", 
-          reason: "Popular follow-up after basics", 
-          type: "Suggested Course", 
-          link: "/courses" 
+        {
+          title: "Advanced JavaScript Concepts",
+          reason: "Popular follow-up after basics",
+          type: "Suggested Course",
+          link: "/courses"
         },
-        { 
-          title: "React Performance Tips", 
-          reason: "Based on your learning pattern", 
-          type: "Article", 
-          link: "#" 
+        {
+          title: "React Performance Tips",
+          reason: "Based on your learning pattern",
+          type: "Article",
+          link: "#"
         }
       );
     }
@@ -1797,21 +1821,21 @@ exports.generateQuiz = async (req, res) => {
     const quizContext =
       scope === "final"
         ? course.modules
-            .map((mod, modIndex) =>
-              [
-                `Module ${modIndex + 1}: ${mod.title}`,
-                ...(mod.chapters || []).map(
-                  (ch, chIndex) => `Chapter ${chIndex + 1}: ${ch.title}\n${ch.content || ""}`
-                ),
-              ].join("\n")
-            )
-            .join("\n\n")
-            .slice(0, 18000)
+          .map((mod, modIndex) =>
+            [
+              `Module ${modIndex + 1}: ${mod.title}`,
+              ...(mod.chapters || []).map(
+                (ch, chIndex) => `Chapter ${chIndex + 1}: ${ch.title}\n${ch.content || ""}`
+              ),
+            ].join("\n")
+          )
+          .join("\n\n")
+          .slice(0, 18000)
         : scope === "module"
           ? module.chapters
-              .map((ch, index) => `Chapter ${index + 1}: ${ch.title}\n${ch.content || ""}`)
-              .join("\n\n")
-              .slice(0, 8000)
+            .map((ch, index) => `Chapter ${index + 1}: ${ch.title}\n${ch.content || ""}`)
+            .join("\n\n")
+            .slice(0, 8000)
           : chapterContent || chapter.content || "";
 
     const quizTitle =
@@ -2045,7 +2069,7 @@ exports.getDashboardActivitySummary = async (req, res) => {
   try {
     const user = await require('../models/User').findById(req.user._id);
     const enrolledYear = user ? new Date(user.createdAt).getFullYear() : new Date().getFullYear();
-    
+
     const year = req.query.year ? parseInt(req.query.year) : new Date().getFullYear();
     const startDate = new Date(Date.UTC(year, 0, 1));
     const endDate = new Date(Date.UTC(year, 11, 31, 23, 59, 59, 999));
@@ -2057,10 +2081,38 @@ exports.getDashboardActivitySummary = async (req, res) => {
 
     const summary = buildHeatmap(activities, year);
     summary.enrolledYear = enrolledYear;
-    
+
     res.json(summary);
   } catch (error) {
     console.error("getDashboardActivitySummary error:", error);
     res.status(500).json({ message: "Failed to fetch activity summary" });
+  }
+};
+
+
+exports.getCourseUsage = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id);
+
+    const activeCourses = await Course.countDocuments({
+      user: req.user._id,
+    });
+
+    res.json({
+      success: true,
+      plan: user?.plan || "free",
+      activeCourses,
+      limit:
+        user?.plan === "pro"
+          ? null
+          : FREE_ACTIVE_COURSE_LIMIT,
+    });
+  } catch (error) {
+    console.error("Usage fetch error:", error);
+
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch usage",
+    });
   }
 };

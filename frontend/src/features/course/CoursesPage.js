@@ -1,3 +1,4 @@
+import { getCourseUsage } from "./services/courseApi";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import {
@@ -54,6 +55,7 @@ const CoursesPage = () => {
   const handleGenerateCourse = async () => {
     const token = localStorage.getItem("token");
 
+
     if (!token) {
       navigate("/login");
       return;
@@ -65,6 +67,18 @@ const CoursesPage = () => {
     }
 
     try {
+
+      const usage = await getCourseUsage();
+
+      const limitReached =
+        usage.limit !== null &&
+        usage.activeCourses >= usage.limit;
+
+        if (limitReached) {
+          navigate("/upgrade");
+          return;
+        }
+
       setLoading(true);
 
       const API_BASE =
@@ -111,90 +125,93 @@ const CoursesPage = () => {
     }
   };
 
+
   return (
-    <div className="courses-page">
-      {/* HERO */}
-      <section className="courses-hero">
-        <div className="hero-glow"></div>
 
-        <motion.div
-          className="hero-content"
-          initial={{ opacity: 0, y: 70 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <span className="hero-badge">
-            AI Learning Ecosystem
-          </span>
+      <div className="courses-page">
+        {/* HERO */}
+        <section className="courses-hero">
+          <div className="hero-glow"></div>
 
-          <h1>
-            Build Personalized
-            <br />
-            AI-Powered Courses
-          </h1>
+          <motion.div
+            className="hero-content"
+            initial={{ opacity: 0, y: 70 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <span className="hero-badge">
+              AI Learning Ecosystem
+            </span>
 
-          <p>
-            Generate intelligent learning roadmaps,
-            structured modules, quizzes, and resources instantly.
-          </p>
+            <h1>
+              Build Personalized
+              <br />
+              AI-Powered Courses
+            </h1>
 
-          {/* SEARCH */}
-          <div className="course-generator">
-            <input
-              type="text"
-              value={keywords}
-              onChange={(e) =>
-                setKeywords(e.target.value)
-              }
-              placeholder="Enter topic like Machine Learning..."
-            />
+            <p>
+              Generate intelligent learning roadmaps,
+              structured modules, quizzes, and resources instantly.
+            </p>
 
-            <button
-              onClick={handleGenerateCourse}
-              disabled={loading}
-            >
-              {loading ? "Generating..." : "Generate Course"}
-              <FaArrowRight />
-            </button>
+            {/* SEARCH */}
+            <div className="course-generator">
+              <input
+                type="text"
+                value={keywords}
+                onChange={(e) =>
+                  setKeywords(e.target.value)
+                }
+                placeholder="Enter topic like Machine Learning..."
+              />
+
+              <button
+                onClick={handleGenerateCourse}
+                disabled={loading}
+              >
+                {loading ? "Generating..." : "Generate Course"}
+                <FaArrowRight />
+              </button>
+            </div>
+
+            {/* TAGS */}
+            <div className="trending-topics">
+              {trendingTopics.map((topic, index) => (
+                <button
+                  key={index}
+                  onClick={() => setKeywords(topic)}
+                >
+                  {topic}
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        </section>
+
+        {/* FEATURES */}
+        <section className="course-features">
+          <div className="section-header">
+            <span>PLATFORM FEATURES</span>
+            <h2>Learn Smarter with AI</h2>
           </div>
 
-          {/* TAGS */}
-          <div className="trending-topics">
-            {trendingTopics.map((topic, index) => (
-              <button
+          <div className="features-grid">
+            {featureCards.map((feature, index) => (
+              <motion.div
+                className="feature-card"
                 key={index}
-                onClick={() => setKeywords(topic)}
+                whileHover={{ y: -8 }}
               >
-                {topic}
-              </button>
+                <div className="feature-icon">
+                  {feature.icon}
+                </div>
+                <h3>{feature.title}</h3>
+                <p>{feature.text}</p>
+              </motion.div>
             ))}
           </div>
-        </motion.div>
-      </section>
+        </section>
+      </div>
 
-      {/* FEATURES */}
-      <section className="course-features">
-        <div className="section-header">
-          <span>PLATFORM FEATURES</span>
-          <h2>Learn Smarter with AI</h2>
-        </div>
-
-        <div className="features-grid">
-          {featureCards.map((feature, index) => (
-            <motion.div
-              className="feature-card"
-              key={index}
-              whileHover={{ y: -8 }}
-            >
-              <div className="feature-icon">
-                {feature.icon}
-              </div>
-              <h3>{feature.title}</h3>
-              <p>{feature.text}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-    </div>
   );
 };
 

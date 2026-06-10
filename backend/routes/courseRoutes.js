@@ -16,17 +16,18 @@ const {
   getMyCourses,
   getModuleVideos,
   getModuleArticles,
-  getRecentActivity, 
-  getLastQuiz, 
+  getRecentActivity,
+  getLastQuiz,
   getRecommendations,
   getDashboardActivitySummary,
   submitQuizAttempt,
+  getCourseUsage,
 } = require("../controllers/courseController");
 
 router.post("/generate-structure", protect, generateCourseStructure);
 router.post("/enroll", protect, enrollCourse);
 
-
+router.get("/usage", protect, getCourseUsage);
 router.get("/dashboard", protect, getMyCourses);
 router.get('/activity/recent', protect, getRecentActivity);
 router.get('/activity/summary', protect, getDashboardActivitySummary);

@@ -90,3 +90,6 @@ export const getModuleVideos = (data) =>
 
 export const getModuleArticles = (data) =>
   API.post("/module-articles", data).then(handleRes);
+
+export const getCourseUsage = () =>
+  API.get("/usage").then(handleRes);

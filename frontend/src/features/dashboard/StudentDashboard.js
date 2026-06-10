@@ -90,6 +90,7 @@ const StudentDashboard = () => {
   const {
     courses = [],
     user,
+    usage,
     lastQuiz,
     activitySummary = {},
     recentActivity = [],
@@ -101,6 +102,18 @@ const StudentDashboard = () => {
 
   const [heroQuote] = useState(() => MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)]);
   const navigate = useNavigate();
+
+  const usagePercentage =
+    usage?.limit && usage.limit > 0
+      ? Math.min(
+        (usage.activeCourses / usage.limit) * 100,
+        100
+      )
+      : 0;
+
+  const limitReached =
+    usage?.limit &&
+    usage.activeCourses >= usage.limit;
 
   const handleYearChange = (e) => {
     const year = parseInt(e.target.value, 10);
@@ -227,6 +240,54 @@ const StudentDashboard = () => {
         <div className="dashboard-stat-card dashboard-stat-card--accent">
           <span className="dashboard-stat-value">{activitySummary.currentStreak || 0}</span>
           <span className="dashboard-stat-label">Day Streak</span>
+        </div>
+
+        <div
+          className={`dashboard-stat-card dashboard-usage-card ${limitReached ? "dashboard-usage-card--danger" : ""
+            }`}
+        >
+          <div className="usage-card-header">
+            <span className="usage-plan-badge">
+              {usage?.plan === "pro" ? "PRO" : "FREE"}
+            </span>
+          </div>
+
+          <span className="dashboard-stat-value">
+            {usage?.activeCourses || 0}
+            {usage?.limit ? `/${usage.limit}` : ""}
+          </span>
+
+          <span className="dashboard-stat-label">
+            Active Courses
+          </span>
+
+          <div className="usage-progress-bar">
+            <div
+              className="usage-progress-fill"
+              style={{
+                width: `${usagePercentage}%`,
+              }}
+            />
+          </div>
+
+          {limitReached ? (
+            <div className="usage-limit-actions">
+              <span className="usage-warning">
+                Free Plan Limit Reached
+              </span>
+
+              <button
+                className="upgrade-plan-btn"
+                onClick={() => navigate("/upgrade")}
+              >
+                Upgrade to Pro
+              </button>
+            </div>
+          ) : (
+            <span className="usage-warning">
+              {usage?.limit - usage?.activeCourses} Remaining
+            </span>
+          )}
         </div>
       </div>
 

@@ -1,6 +1,6 @@
 import { Navigate, Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-
+import UpgradePage from "./pages/UpgradePage";
 import CourseDetailsPage from "./features/course/CourseDetailsPage";
 import CoursesPage from "./features/course/CoursesPage";
 
@@ -66,7 +66,7 @@ const MainApp = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          
+          <Route path="/upgrade" element={<UpgradePage />} />
           {/* Unified Student Dashboard Workspace */}
           <Route
             element={
@@ -98,6 +98,7 @@ const MainApp = () => {
               </ProtectedRoute>
             }
           />
+          
         </Routes>
       </main>
       {/* Show footer only on Home Page */}

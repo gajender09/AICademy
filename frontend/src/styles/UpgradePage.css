@@ -1,0 +1,71 @@
+.upgrade-page {
+  min-height: 100vh;
+  background: var(--page-gradient-start);
+  padding: 120px 5% 80px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.upgrade-card {
+  background: var(--parchment);
+  border: 1.5px solid var(--cream-3);
+  border-radius: 22px;
+  padding: 34px;
+  box-shadow: 6px 6px 0 var(--card-shadow);
+  max-width: 400px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.upgrade-badge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 999px;
+}
+
+.upgrade-card h1 {
+  font-family: 'Fraunces', serif;
+  font-size: 32px;
+  color: var(--forest-display);
+  margin-bottom: 16px;
+}
+
+.upgrade-card p {
+  font-size: 16px;
+  color: var(--ink-2);
+  margin-bottom: 24px;
+}
+
+.upgrade-features {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.upgrade-features div {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.upgrade-btn {
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+  color: var(--btn-text);
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.upgrade-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.upgrade-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
