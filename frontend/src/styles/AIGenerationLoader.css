@@ -1,0 +1,491 @@
+/* ─────────────────────────────────────────────
+   AI Generation Loader — Constellation Style
+   AICademy · Cream / Forest / Terracotta
+───────────────────────────────────────────── */
+
+.ai-generation-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overflow: hidden;
+    animation: aiFadeIn 0.35s var(--ease, ease) both;
+  }
+  
+  @keyframes aiFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  /* ════════════════════════════════════════════
+     AMBIENT MESH BACKGROUND
+  ════════════════════════════════════════════ */
+  .ai-mesh-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  
+  .ai-mesh-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(70px);
+    opacity: 0.5;
+    will-change: transform;
+  }
+  
+  .ai-mesh-blob-1 {
+    width: 460px;
+    height: 460px;
+    top: -140px;
+    left: -120px;
+    background: radial-gradient(circle, var(--glow-forest) 0%, transparent 70%);
+    animation: aiDrift1 22s ease-in-out infinite;
+  }
+  
+  .ai-mesh-blob-2 {
+    width: 420px;
+    height: 420px;
+    bottom: -130px;
+    right: -100px;
+    background: radial-gradient(circle, var(--glow-terra) 0%, transparent 70%);
+    animation: aiDrift2 26s ease-in-out infinite;
+  }
+  
+  .ai-mesh-blob-3 {
+    width: 320px;
+    height: 320px;
+    top: 55%;
+    left: 58%;
+    background: radial-gradient(circle, var(--glow-forest-soft) 0%, transparent 70%);
+    animation: aiDrift3 19s ease-in-out infinite;
+  }
+  
+  @keyframes aiDrift1 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(70px, 50px, 0) scale(1.12); }
+  }
+  
+  @keyframes aiDrift2 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-60px, -40px, 0) scale(1.1); }
+  }
+  
+  @keyframes aiDrift3 {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(-50px, 60px, 0) scale(0.94); }
+  }
+  
+  .ai-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.35;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+    background-size: 200px;
+  }
+  
+  /* ════════════════════════════════════════════
+     CARD
+  ════════════════════════════════════════════ */
+  .ai-generation-card {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    max-width: 460px;
+  }
+  
+  /* ════════════════════════════════════════════
+     CONSTELLATION STAGE
+  ════════════════════════════════════════════ */
+  .ai-orb-stage {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  
+  /* slow rotating conic halo behind everything */
+  .ai-halo {
+    position: absolute;
+    width: 156px;
+    height: 156px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 0deg,
+      var(--forest-2) 0deg,
+      transparent 90deg,
+      var(--terra) 180deg,
+      transparent 270deg,
+      var(--forest-2) 360deg
+    );
+    opacity: 0.18;
+    filter: blur(18px);
+    animation: aiHaloSpin 14s linear infinite;
+    will-change: transform;
+  }
+  
+  @keyframes aiHaloSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .ai-orb-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1.5px solid var(--forest-2);
+    will-change: transform, opacity;
+  }
+  
+  .ai-orb-ring--1 {
+    width: 156px;
+    height: 156px;
+    opacity: 0.16;
+    animation: aiRingPulse 3s ease-in-out infinite;
+  }
+  
+  .ai-orb-ring--2 {
+    width: 110px;
+    height: 110px;
+    opacity: 0.3;
+    border-style: dashed;
+    animation: aiRingSpin 16s linear infinite reverse;
+  }
+  
+  @keyframes aiRingPulse {
+    0%, 100% { transform: scale(0.95); opacity: 0.14; }
+    50% { transform: scale(1.05); opacity: 0.3; }
+  }
+  
+  @keyframes aiRingSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* ── SVG constellation: links + nodes ── */
+  .ai-constellation {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  
+  .ai-link {
+    stroke: var(--cream-3);
+    stroke-width: 1.5;
+    transition: stroke 0.6s var(--ease, ease), stroke-opacity 0.6s var(--ease, ease);
+    stroke-opacity: 0.6;
+  }
+  
+  .ai-link.lit {
+    stroke: var(--forest-2);
+    stroke-opacity: 0.9;
+    stroke-dasharray: 4 3;
+    animation: aiLinkFlow 1.2s linear infinite;
+  }
+  
+  @keyframes aiLinkFlow {
+    to { stroke-dashoffset: -14; }
+  }
+  
+  .ai-node {
+    fill: var(--cream-2);
+    stroke: var(--cream-3);
+    stroke-width: 1.5;
+    transition: fill 0.5s var(--ease, ease), stroke 0.5s var(--ease, ease), r 0.4s var(--ease, ease);
+  }
+  
+  .ai-node.done {
+    fill: var(--forest);
+    stroke: var(--forest);
+  }
+  
+  .ai-node.active {
+    fill: var(--terra);
+    stroke: var(--terra);
+    animation: aiNodePulse 1s ease-in-out infinite;
+  }
+  
+  @keyframes aiNodePulse {
+    0%, 100% { r: 6; opacity: 1; }
+    50% { r: 8; opacity: 0.75; }
+  }
+  
+  /* ── logo core ── */
+  .ai-orb-core {
+    position: relative;
+    width: 76px;
+    height: 76px;
+    border-radius: var(--r-lg);
+    background: var(--parchment);
+    border: 1.5px solid var(--cream-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+      4px 4px 0 var(--cream-3),
+      0 0 36px var(--glow-forest);
+    animation: aiCoreBreathe 3s ease-in-out infinite;
+    will-change: transform;
+    z-index: 2;
+    padding: 12px;
+  }
+  
+  @keyframes aiCoreBreathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  .ai-orb-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* ════════════════════════════════════════════
+     BRAND TEXT
+  ════════════════════════════════════════════ */
+  .ai-brand-name {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1.1px;
+    color: var(--forest-display);
+    margin: 8px 0 6px;
+  }
+  
+  .ai-brand-tag {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    letter-spacing: 0.5px;
+    margin: 0 0 28px;
+  }
+  
+  /* ════════════════════════════════════════════
+     LIVE FEED
+  ════════════════════════════════════════════ */
+  .ai-feed {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+    max-height: 280px;
+    overflow: hidden;
+  }
+  
+  .ai-feed-step {
+    border: 1.5px solid var(--cream-3);
+    background: var(--cream);
+    border-radius: var(--r-md);
+    padding: 12px 14px;
+    text-align: left;
+    transition:
+      background 0.4s var(--ease, ease),
+      border-color 0.4s var(--ease, ease),
+      box-shadow 0.4s var(--ease, ease),
+      opacity 0.4s var(--ease, ease),
+      padding 0.4s var(--ease, ease);
+    animation: aiStepIn 0.45s var(--ease, ease) both;
+  }
+  
+  @keyframes aiStepIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .ai-feed-step.done {
+    opacity: 0.55;
+    padding: 9px 14px;
+  }
+  
+  .ai-feed-step.active {
+    background: var(--forest-lt);
+    border-color: var(--forest-2);
+    box-shadow: 3px 3px 0 var(--forest-2);
+  }
+  
+  .ai-feed-step-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .ai-feed-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10.5px;
+    background: var(--cream-2);
+    color: var(--ink-3);
+    border: 1px solid var(--cream-3);
+    transition: all 0.35s var(--ease, ease);
+  }
+  
+  .ai-feed-step.done .ai-feed-icon {
+    background: var(--forest);
+    color: var(--cream);
+    border-color: var(--forest);
+  }
+  
+  .ai-feed-step.active .ai-feed-icon {
+    background: transparent;
+    border-color: transparent;
+  }
+  
+  .ai-feed-spinner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 2px solid var(--cream-3);
+    border-top-color: var(--forest-2);
+    animation: aiSpin 0.8s linear infinite;
+  }
+  
+  @keyframes aiSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  .ai-feed-label {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--forest);
+    font-family: var(--font-body);
+    transition: color 0.35s var(--ease, ease);
+  }
+  
+  .ai-feed-step.done .ai-feed-label {
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  
+  /* reasoning trace lines */
+  .ai-feed-trace {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-left: 32px;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 0.4s var(--ease, ease);
+  }
+  
+  .ai-feed-step.active .ai-feed-trace {
+    margin-top: 10px;
+  }
+  
+  .ai-trace-line {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-2);
+    letter-spacing: 0.2px;
+    opacity: 0;
+    transform: translateX(-6px);
+    animation: aiTraceIn 0.4s var(--ease, ease) forwards;
+  }
+  
+  @keyframes aiTraceIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+  
+  .ai-trace-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--forest-2);
+    flex-shrink: 0;
+    animation: aiBlink 1.6s ease-in-out infinite;
+  }
+  
+  @keyframes aiBlink {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  
+  /* ════════════════════════════════════════════
+     PROGRESS BAR
+  ════════════════════════════════════════════ */
+  .ai-progress-track {
+    width: 100%;
+    height: 6px;
+    background: var(--cream-2);
+    border: 1px solid var(--cream-3);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 14px;
+  }
+  
+  .ai-progress-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, var(--btn-gradient-start), var(--btn-gradient-end));
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    will-change: width;
+  }
+  
+  .ai-progress-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.5),
+      transparent
+    );
+    transform: translateX(-100%);
+    animation: aiShimmer 1.6s ease-in-out infinite;
+  }
+  
+  @keyframes aiShimmer {
+    to { transform: translateX(100%); }
+  }
+  
+  /* ════════════════════════════════════════════
+     HINT
+  ════════════════════════════════════════════ */
+  .ai-hint {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+  
+  /* ════════════════════════════════════════════
+     RESPONSIVE
+  ════════════════════════════════════════════ */
+  @media (max-width: 520px) {
+    .ai-orb-stage { width: 160px; height: 160px; }
+    .ai-halo { width: 130px; height: 130px; }
+    .ai-orb-ring--1 { width: 130px; height: 130px; }
+    .ai-orb-ring--2 { width: 92px; height: 92px; }
+    .ai-orb-core { width: 64px; height: 64px; padding: 10px; }
+    .ai-brand-name { font-size: 24px; }
+    .ai-feed { max-height: 240px; }
+    .ai-feed-step { padding: 10px 12px; }
+    .ai-feed-trace { padding-left: 26px; }
+  }
