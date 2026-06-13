@@ -316,3 +316,93 @@
     text-align: center;
   }
 }
+
+
+/* ─────────────────────────────────────────────
+   Course Unlock Screen — Course Card Style
+   Add this block to CourseDetailsPage.css
+───────────────────────────────────────────── */
+
+.course-locked {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px;
+}
+
+.unlock-card {
+  width: 100%;
+  max-width: 380px;
+  cursor: default;
+}
+
+.unlock-card:hover {
+  transform: none;
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.08),
+    4px 4px 0 var(--card-shadow);
+  border-color: var(--cream-3);
+}
+
+/* ── Media area: stronger dark overlay so white title always pops ── */
+.unlock-card .dashboard-course-media.unlock-media::after {
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.55)),
+    radial-gradient(circle at 20% 10%, rgba(255,255,255,0.18), transparent 28%);
+}
+
+.unlock-media {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 22px;
+  text-align: center;
+}
+
+.unlock-card h1.unlock-media-title {
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--font-display, "Fraunces", Georgia, serif);
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff !important;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* reuse the neutral status badge styling for "Preview" tag */
+.unlock-media .dashboard-course-status {
+  background: rgba(255, 255, 255, 0.9);
+  color: #1f2937;
+}
+
+.unlock-subtitle {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.unlock-card .dashboard-course-footer {
+  justify-content: center;
+  margin-top: auto;
+}
+
+.unlock-card .dashboard-course-action {
+  width: 100%;
+}
+
+@media (max-width: 480px) {
+  .unlock-card h1.unlock-media-title {
+    font-size: 1.35rem;
+  }
+}
