@@ -6,6 +6,7 @@ import {
   useNavigate,
   useParams,
 } from "react-router-dom";
+import { FaLayerGroup, FaBookOpen, FaPlay } from "react-icons/fa";
 
 import "./styles/ContentTab.css";
 import "./styles/CourseDetailsPage.css";
@@ -166,28 +167,74 @@ const handleEnroll = async () => {
   };
 
   /* =====================================================
-     🚨 LOADING / SAFETY
+     🚨 LOADING / UNLOCK (COURSE CARD STYLE)
   ===================================================== */
-if (!course?._id) {
-  if (loading) {
+  if (!course?._id) {
+    if (loading && !course) {
+      return (
+        <div className="course-locked">
+          <div className="dashboard-course-card unlock-card skeleton-card" style={{ minHeight: 360 }} />
+        </div>
+      );
+    }
+
+    const moduleCount = course?.modules?.length || 0;
+    const chapterCount =
+      course?.modules?.reduce(
+        (acc, m) => acc + (m.chapters?.length || 0),
+        0
+      ) || 0;
+
     return (
       <div className="course-locked">
-        <h1>Loading course...</h1>
+        <article className="dashboard-course-card unlock-card">
+
+          <div className="dashboard-course-media unlock-media">
+            <span className="dashboard-course-status">
+              Preview
+            </span>
+            <h1 className="unlock-media-title">
+              {course?.title || "Untitled Course"}
+            </h1>
+          </div>
+
+          <div className="dashboard-course-body">
+
+            <div className="dashboard-course-tags" aria-label="Course tags">
+              <span>AI Generated</span>
+            </div>
+
+            <div className="dashboard-course-facts">
+              <span>
+                <FaLayerGroup /> {moduleCount} Modules
+              </span>
+              <span>
+                <FaBookOpen /> {chapterCount} Chapters
+              </span>
+            </div>
+
+            <p className="unlock-subtitle">
+              Unlock the full course — roadmap, content, quizzes and more.
+            </p>
+
+            <div className="dashboard-course-footer">
+              <button
+                className="dashboard-course-action"
+                type="button"
+                onClick={handleEnroll}
+                disabled={loading}
+              >
+                <FaPlay />
+                {loading ? "Enrolling..." : "Enroll Now"}
+              </button>
+            </div>
+
+          </div>
+
+        </article>
       </div>
     );
   }
-
-  return (
-    <div className="course-locked">
-      <h1>{course?.title || "Course"}</h1>
-      <p>Unlock full course by enrolling</p>
-
-      <button onClick={handleEnroll} disabled={loading}>
-        {loading ? "Enrolling..." : "Enroll Now"}
-      </button>
-    </div>
-  );
-}
 
   return (
     <div className="course-details-layout">
