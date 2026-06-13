@@ -1,0 +1,319 @@
+/* =========================================
+   AI LAB LOCKED PAGE
+========================================= */
+
+
+.ai-upgrade-container {
+
+    min-height: calc(100vh - 80px);
+  
+    background: var(--page-gradient-start);
+  
+    padding: 40px 5%;
+  
+    color: var(--ink);
+  
+    display: flex;
+  
+    align-items: center;
+  
+    justify-content: center;
+  
+    overflow: hidden;
+  
+  }
+  
+  
+  
+  /* =========================================
+     MAIN CARD
+  ========================================= */
+  
+  
+  .ai-upgrade-card {
+  
+    background: var(--parchment);
+  
+    border: 1.5px solid var(--cream-3);
+  
+    border-radius: 22px;
+  
+    padding: 28px;
+  
+    box-shadow: 6px 6px 0 var(--card-shadow);
+  
+    max-width: 420px;
+  
+    width: 100%;
+  
+    text-align: center;
+  
+  }
+  
+  
+  
+  /* =========================================
+     ICON
+  ========================================= */
+  
+  
+  .ai-upgrade-icon {
+  
+    width: 62px;
+  
+    height: 62px;
+  
+    margin: 0 auto 16px;
+  
+    border-radius: 50%;
+  
+  
+    display: flex;
+  
+    align-items: center;
+  
+    justify-content: center;
+  
+  
+    background:
+    linear-gradient(
+      135deg,
+      var(--btn-gradient-start),
+      var(--btn-gradient-end)
+    );
+  
+  
+    color: var(--btn-text);
+  
+    font-size: 28px;
+  
+  }
+  
+  
+  
+  /* =========================================
+     TITLE
+  ========================================= */
+  
+  
+  .ai-upgrade-card h1 {
+  
+    font-family: 'Fraunces', serif;
+  
+    font-size: 30px;
+  
+    color: var(--forest-display);
+  
+    margin: 0 0 10px;
+  
+  }
+  
+  
+  
+  
+  /* =========================================
+     DESCRIPTION
+  ========================================= */
+  
+  
+  .ai-upgrade-card p {
+  
+    font-size: 15px;
+  
+    line-height: 1.5;
+  
+    color: var(--ink-2);
+  
+    margin:0 0 20px;
+  
+  }
+  
+  
+  
+  /* =========================================
+     FEATURE LIST
+  ========================================= */
+  
+  
+  .ai-feature-list {
+  
+    display:flex;
+  
+    flex-direction:column;
+  
+    gap:10px;
+  
+    margin-bottom:22px;
+  
+    text-align:left;
+  
+  }
+  
+  
+  
+  
+  .ai-feature-list div {
+  
+  
+    display:flex;
+  
+    align-items:center;
+  
+  
+    gap:12px;
+  
+  
+    padding:10px 12px;
+  
+  
+    border-radius:12px;
+  
+  
+    background:var(--cream-1);
+  
+  
+    border:1px solid var(--cream-3);
+  
+  
+  }
+  
+  
+  
+  
+  .ai-feature-list svg {
+  
+  
+    color:var(--forest-display);
+  
+    font-size:17px;
+  
+    min-width:18px;
+  
+  }
+  
+  
+  
+  .ai-feature-list span {
+  
+  
+    font-size:14px;
+  
+    color:var(--ink-2);
+  
+    font-weight:500;
+  
+  }
+  
+  
+  
+  /* =========================================
+     BUTTON
+  ========================================= */
+  
+  
+  .ai-upgrade-card button {
+  
+  
+    width:100%;
+  
+  
+    display:flex;
+  
+    align-items:center;
+  
+    justify-content:center;
+  
+  
+    gap:10px;
+  
+  
+    padding:12px 20px;
+  
+  
+    border:none;
+  
+  
+    border-radius:var(--radius-sm);
+  
+  
+    background:
+  
+    linear-gradient(
+  
+      135deg,
+  
+      var(--btn-gradient-start),
+  
+      var(--btn-gradient-end)
+  
+    );
+  
+  
+    color:var(--btn-text);
+  
+  
+    font-size:15px;
+  
+  
+    font-weight:600;
+  
+  
+    cursor:pointer;
+  
+  
+    transition:0.2s ease;
+  
+  
+  }
+  
+  
+  
+  .ai-upgrade-card button:hover {
+  
+  
+    transform:translateY(-2px);
+  
+  }
+  
+  
+  
+  /* =========================================
+     RESPONSIVE
+  ========================================= */
+  
+  
+  @media(max-width:600px){
+  
+  
+  .ai-upgrade-container {
+  
+    padding:30px 20px;
+  
+  }
+  
+  
+  
+  .ai-upgrade-card {
+  
+    padding:24px;
+  
+  }
+  
+  
+  
+  .ai-upgrade-card h1 {
+  
+    font-size:26px;
+  
+  }
+  
+  
+  
+  .ai-feature-list div {
+  
+    padding:9px 10px;
+  
+  }
+  
+  
+  }
