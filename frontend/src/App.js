@@ -66,7 +66,7 @@ const MainApp = () => {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/upgrade" element={<UpgradePage />} />
+          <Route path="/pricing" element={<UpgradePage />} />
           {/* Unified Student Dashboard Workspace */}
           <Route
             element={
