@@ -10,10 +10,12 @@ import {
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../../styles/CoursesPage.css";
+import AIGenerationLoader from "../../components/AIGenerationLoader";
 
 const CoursesPage = () => {
   const [keywords, setKeywords] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showAILoader, setShowAILoader] = useState(false);
 
   const navigate = useNavigate();
 
@@ -74,12 +76,13 @@ const CoursesPage = () => {
         usage.limit !== null &&
         usage.activeCourses >= usage.limit;
 
-        if (limitReached) {
-          navigate("/upgrade");
-          return;
-        }
+      if (limitReached) {
+        navigate("/pricing");
+        return;
+      }
 
       setLoading(true);
+      setShowAILoader(true);
 
       const API_BASE =
         process.env.REACT_APP_API_URL?.replace(/\/$/, "") ||
@@ -103,30 +106,60 @@ const CoursesPage = () => {
       const data = await response.json();
 
       if (response.ok && data.structure) {
+
         const slug = keywords
           .toLowerCase()
           .replace(/\s+/g, "-");
 
-        navigate(`/courses/${slug}`, {
-          state: {
-            title: keywords,
-            modules: data.structure,
-            progress: 0,
-          },
-        });
+
+        // keep AI animation for experience
+        setTimeout(() => {
+
+          setShowAILoader(false);
+
+
+          navigate(`/courses/${slug}`, {
+
+            state: {
+              title: keywords,
+              modules: data.structure,
+              progress: 0
+            }
+
+          });
+
+
+        }, 3500);
+
+
       } else {
+
+        setShowAILoader(false);
+
         alert("Invalid response from server");
+
       }
-    } catch (error) {
+    }
+    catch (error) {
+
       console.error(error);
+
+      setShowAILoader(false);
+
       alert("Network error");
-    } finally {
+
+    }
+    finally {
+
       setLoading(false);
+
     }
   };
 
 
   return (
+    <>
+      <AIGenerationLoader show={showAILoader} />
 
       <div className="courses-page">
         {/* HERO */}
@@ -211,7 +244,7 @@ const CoursesPage = () => {
           </div>
         </section>
       </div>
-
+    </>
   );
 };
 
