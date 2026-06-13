@@ -608,3 +608,85 @@ padding: 16px;
 grid-template-columns: 1fr;
 }
 }
+
+
+/* ─────────────────────────────────────────────
+   Course Card Media — Title Centered on Green BG
+   Append to MyCoursesPage.css
+───────────────────────────────────────────── */
+
+/* Kill the ::after overlay that was covering children */
+.dashboard-course-media::after {
+    display: none !important;
+  }
+  
+  /* ── Faint large initials watermark ── */
+  .cm-watermark {
+    position: absolute;
+    bottom: -14px;
+    right: -6px;
+    z-index: 1;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 120px;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1;
+    letter-spacing: -6px;
+    color: rgba(255, 255, 255, 0.07);
+    pointer-events: none;
+    user-select: none;
+  }
+  
+  /* ── Scrim now covers the full area and centers content ── */
+  .cm-scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(
+      135deg,
+      rgba(0, 0, 0, 0.28) 0%,
+      rgba(0, 0, 0, 0.18) 100%
+    );
+    text-align: center;
+  }
+  
+  /* ── Course title — centered, big, always white ── */
+  .cm-title {
+    margin: 0;
+    padding: 0;
+    font-family: "Fraunces", Georgia, serif;
+    font-size: 1.45rem;
+    font-weight: 900;
+    font-style: italic;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    color: #ffffff;
+    text-shadow:
+      0 2px 8px rgba(0, 0, 0, 0.55),
+      0 4px 24px rgba(0, 0, 0, 0.35);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* ── Keep status badge above scrim ── */
+  .dashboard-course-status {
+    z-index: 3;
+  }
+  
+  /* ── Remove old fallback block ── */
+  .dashboard-course-image-fallback {
+    display: none;
+  }
+  
+  /* ── Responsive ── */
+  @media (max-width: 760px) {
+    .cm-title {
+      font-size: 1.2rem;
+    }
+  }
