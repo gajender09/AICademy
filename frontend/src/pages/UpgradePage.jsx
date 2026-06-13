@@ -1,46 +1,231 @@
-// src/pages/Upgrade/UpgradePage.jsx
-
 import "../styles/UpgradePage.css";
-import { useState } from "react";
+import { FaCheck } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+
+const plans = [
+
+  {
+    name: "FREE",
+    price: "₹0",
+    duration: "",
+    description: "Start learning with AI-powered tools",
+
+    features: [
+      "3 AI Courses",
+      "Basic Learning Roadmaps",
+      "Quiz Generation",
+      "Progress Tracking",
+    ],
+
+    button: "Current Plan",
+
+    current: true,
+  },
+
+
+  {
+    name: "PRO",
+    price: "₹499",
+    duration: "/month",
+
+    description: "For serious learners building skills",
+
+    popular: true,
+
+    features: [
+      "Unlimited AI Courses",
+      "AI Lab Access",
+      "Advanced Analytics",
+      "AI Tutor",
+      "Unlimited Quizzes",
+    ],
+
+    button: "Upgrade",
+  },
+
+
+  {
+    name: "PREMIUM",
+
+    price: "₹999",
+
+    duration: "/month",
+
+    description:
+      "For career-focused learners",
+
+    features: [
+      "Everything in Pro",
+      "Personal AI Mentor",
+      "Interview Preparation",
+      "Project Reviews",
+      "Career Roadmaps",
+    ],
+
+    button: "Upgrade",
+  }
+
+];
+
+
+
 const UpgradePage = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const handleUpgrade = () => {
-    console.log("Upgrade to Pro");
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setError("Upgrade failed");
-    }, 1000);
-  };
+
+
+  const navigate = useNavigate();
+
+
 
   return (
-    <div className="upgrade-page">
-      <div className="upgrade-card">
-        <span className="upgrade-badge">
-          AICademy Pro
-        </span>
 
-        <h1>Upgrade to Pro</h1>
+    <div className="pricing-page">
+
+
+      <div className="pricing-header">
+
+        <h1>
+          AICademy Pricing
+        </h1>
 
         <p>
-          You've reached the free plan limit.
-          Upgrade to unlock unlimited AI-powered learning.
+          Choose the plan that fits your learning journey
         </p>
 
-        <div className="upgrade-features">
-          <div>✓ Unlimited Courses</div>
-          <div>✓ Unlimited AI Generation</div>
-          <div>✓ Premium AI Lab</div>
-          <div>✓ Priority Features</div>
-        </div>
-
-        <button className="upgrade-btn" onClick={handleUpgrade} disabled={loading}>
-          Upgrade to Pro
-        </button>
       </div>
+
+
+
+      <div className="pricing-container">
+
+
+        {
+          plans.map((plan, index) => (
+
+
+            <div
+
+              key={index}
+
+              className={`pricing-card 
+${plan.popular ? "popular" : ""}
+`}
+
+            >
+
+
+              {
+                plan.popular && (
+
+                  <div className="popular-badge">
+                    MOST POPULAR
+                  </div>
+
+                )
+              }
+
+
+
+
+              <h2>
+                {plan.name}
+              </h2>
+
+
+
+              <div className="price">
+
+
+                {plan.price}
+
+
+                <span>
+                  {plan.duration}
+                </span>
+
+
+              </div>
+
+
+
+              <div className="plan-features">
+
+
+                {
+                  plan.features.map((feature, i) => (
+
+
+                    <div key={i}>
+
+                      <FaCheck />
+
+                      <span>
+                        {feature}
+                      </span>
+
+                    </div>
+
+
+                  ))
+                }
+
+
+              </div>
+
+
+
+
+              <button
+
+
+                disabled={plan.current}
+
+
+                className={
+                  plan.current
+                    ?
+                    "current-plan-btn"
+                    :
+                    "pricing-btn"
+                }
+
+
+                onClick={() => {
+
+                  if (!plan.current) {
+
+                    navigate("/payment");
+
+                  }
+
+                }}
+
+
+              >
+
+                {plan.button}
+
+
+              </button>
+
+
+
+            </div>
+
+
+          ))
+        }
+
+
+      </div>
+
+
     </div>
+
+
   );
+
 };
+
 
 export default UpgradePage;
