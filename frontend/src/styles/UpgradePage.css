@@ -1,71 +1,713 @@
-.upgrade-page {
+/* ================================
+   PRICING PAGE
+================================ */
+
+.pricing-page {
+
   min-height: 100vh;
-  background: var(--page-gradient-start);
-  padding: 120px 5% 80px;
-  color: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+
+  /*
+    Header safe spacing
+    because navbar exists
+  */
+  padding:
+    120px 40px 80px;
+
+  background:
+    radial-gradient(
+      circle at top,
+      rgba(99,102,241,0.18),
+      transparent 35%
+    ),
+    var(--background);
+
+  color:
+    var(--text);
+
 }
 
-.upgrade-card {
-  background: var(--parchment);
-  border: 1.5px solid var(--cream-3);
-  border-radius: 22px;
-  padding: 34px;
-  box-shadow: 6px 6px 0 var(--card-shadow);
-  max-width: 400px;
-  margin: 0 auto;
-  text-align: center;
+
+
+/* ================================
+   HEADER
+================================ */
+
+
+.pricing-header {
+
+  text-align:center;
+
+  max-width:700px;
+
+  margin:
+    0 auto 60px;
+
 }
 
-.upgrade-badge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 999px;
+
+
+.pricing-header h1 {
+
+  font-size:
+    clamp(34px,5vw,48px);
+
+  font-weight:
+    850;
+
+  letter-spacing:
+    -1px;
+
+  margin-bottom:
+    16px;
+
+  color:var(--forest-display);
 }
 
-.upgrade-card h1 {
-  font-family: 'Fraunces', serif;
-  font-size: 32px;
-  color: var(--forest-display);
-  margin-bottom: 16px;
+
+
+.pricing-header p {
+
+  font-size:
+    18px;
+
+  opacity:
+    .75;
+
+  line-height:
+    1.6;
+
+
 }
 
-.upgrade-card p {
-  font-size: 16px;
-  color: var(--ink-2);
-  margin-bottom: 24px;
+
+
+/* ================================
+   CONTAINER
+================================ */
+
+
+.pricing-container {
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:
+    30px;
+
+
+  max-width:
+    1200px;
+
+  margin:
+    auto;
+
+  align-items:
+    stretch;
+
 }
 
-.upgrade-features {
-  margin-bottom: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+
+
+/* ================================
+   CARD
+================================ */
+
+
+.pricing-card {
+
+
+  position:
+    relative;
+
+
+  padding:
+    38px;
+
+
+  border-radius:
+    28px;
+
+
+
+  /*
+    Glass effect
+  */
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.55),
+      rgba(255,255,255,.18)
+    );
+
+
+  backdrop-filter:
+    blur(18px);
+
+
+
+  border:
+
+    1px solid
+    var(--border);
+
+
+
+  box-shadow:
+
+
+    0 20px 60px
+    rgba(0,0,0,.12);
+
+
+
+  transition:
+
+    transform .3s ease,
+    box-shadow .3s ease,
+    border .3s ease;
+
+
+
 }
 
-.upgrade-features div {
-  font-size: 14px;
-  color: var(--ink-2);
+
+
+.pricing-card:hover {
+
+
+  transform:
+    translateY(-10px);
+
+
+  box-shadow:
+
+
+    0 30px 80px
+    rgba(0,0,0,.18);
+
+
 }
 
-.upgrade-btn {
-  padding: 12px 24px;
-  border-radius: var(--radius-sm);
-  border: none;
-  background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
-  color: var(--btn-text);
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.2s;
+
+
+
+/* ================================
+   CARD TITLE
+================================ */
+
+
+.pricing-card h2 {
+
+
+  font-size:
+    28px;
+
+
+  font-weight:
+    800;
+
+
+  margin-bottom:
+    10px;
+
+  color:var(--forest-display);
+
+
 }
 
-.upgrade-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+
+
+
+
+/* ================================
+   PRICE
+================================ */
+
+
+.price {
+
+
+  font-size:
+    46px;
+
+
+  font-weight:
+    900;
+
+
+  letter-spacing:
+    -1px;
+
+
+  margin:
+    22px 0;
+
+
+  color:
+    var(--forest-display);
+
+
 }
 
-.upgrade-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
+
+
+.price span {
+
+
+  font-size:
+    16px;
+
+
+  font-weight:
+    500;
+
+
+  opacity:
+    .65;
+
+
+}
+
+
+
+
+
+/* ================================
+   DESCRIPTION
+================================ */
+
+
+.plan-desc {
+
+
+  min-height:
+    50px;
+
+
+  opacity:
+    .75;
+
+
+  line-height:
+    1.5;
+
+
+}
+
+
+
+
+
+/* ================================
+   FEATURES
+================================ */
+
+
+.plan-features {
+
+
+  margin-top:
+    32px;
+
+
+  display:flex;
+
+  flex-direction:
+    column;
+
+
+  gap:
+    16px;
+
+
+}
+
+
+
+.plan-features div {
+
+
+  display:flex;
+
+
+  align-items:center;
+
+
+  gap:
+    12px;
+
+
+  font-size:
+    15px;
+
+
+}
+
+
+
+.plan-features svg {
+
+
+  color:
+    #22c55e;
+
+
+  flex-shrink:
+    0;
+
+
+}
+
+
+
+
+/* ================================
+   BUTTONS
+================================ */
+
+
+.pricing-btn,
+.current-plan-btn {
+
+
+  margin-top:
+    35px;
+
+
+  width:
+    100%;
+
+
+  padding:
+    15px;
+
+
+  border-radius:
+    16px;
+
+
+  font-size:
+    15px;
+
+
+  font-weight:
+    700;
+
+
+  border:
+    none;
+
+
+  cursor:
+    pointer;
+
+
+  transition:
+    .25s ease;
+
+
+}
+
+
+
+
+.pricing-btn {
+
+
+  background:
+
+    linear-gradient(
+      135deg,
+      var(--btn-gradient-start),
+      var(--btn-gradient-end)
+    );
+
+
+  color:
+    var(--btn-text);
+
+
+  box-shadow:
+
+
+    0 10px 25px
+    rgba(0,0,0,.15);
+
+
+}
+
+
+
+.pricing-btn:hover {
+
+
+  transform:
+    translateY(-3px);
+
+
+}
+
+
+
+.current-plan-btn {
+
+
+  background:
+    transparent;
+
+
+  border:
+    1px solid var(--border);
+
+
+  color:
+    var(--text);
+
+
+  cursor:
+    not-allowed;
+
+
+}
+
+
+
+
+
+/* ================================
+   PRO / POPULAR CARD
+================================ */
+
+
+.popular {
+
+
+  border:
+    2px solid
+    var(--forest-display);
+
+
+
+  transform:
+    translateY(-18px);
+
+
+
+  box-shadow:
+
+
+    0 35px 90px
+    rgba(0,0,0,.22);
+
+
+
+}
+
+
+
+.popular:hover {
+
+
+  transform:
+    translateY(-28px);
+
+
+}
+
+
+
+
+.popular-badge {
+
+
+  position:absolute;
+
+
+  top:
+    -16px;
+
+
+  left:
+    50%;
+
+
+  transform:
+    translateX(-50%);
+
+
+
+  padding:
+    8px 22px;
+
+
+  border-radius:
+    999px;
+
+
+  background:
+
+
+    linear-gradient(
+      135deg,
+      var(--btn-gradient-start),
+      var(--btn-gradient-end)
+    );
+
+
+  color:
+    var(--btn-text);
+
+
+  font-size:
+    12px;
+
+
+  font-weight:
+    800;
+
+
+  letter-spacing:
+    .5px;
+
+
+}
+
+
+
+
+/* ================================
+   DARK MODE
+================================ */
+
+
+[data-theme="dark"]
+.pricing-card {
+
+
+  background:
+
+
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.08),
+      rgba(255,255,255,.03)
+    );
+
+
+  border-color:
+
+
+    rgba(255,255,255,.12);
+
+
+
+  box-shadow:
+
+
+    0 25px 80px
+    rgba(0,0,0,.5);
+
+
+
+}
+
+
+
+[data-theme="dark"]
+.pricing-card:hover {
+
+
+  box-shadow:
+
+
+    0 35px 100px
+    rgba(0,0,0,.7);
+
+
+}
+
+
+
+
+[data-theme="dark"]
+.plan-features div {
+
+
+  color:
+    var(--text);
+
+
+}
+
+
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+
+@media(max-width:1000px){
+
+
+.pricing-container{
+
+grid-template-columns:
+1fr;
+
+max-width:
+450px;
+
+}
+
+
+
+.popular {
+
+
+transform:none;
+
+
+}
+
+
+
+.popular:hover {
+
+
+transform:
+translateY(-10px);
+
+
+}
+
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.pricing-page{
+
+padding:
+100px 20px 60px;
+
+}
+
+
+
+.pricing-card{
+
+padding:
+28px;
+
+}
+
+
 }
