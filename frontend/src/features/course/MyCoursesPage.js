@@ -12,6 +12,34 @@ import {
 
 import "../../styles/MyCoursesPage.css";
 
+
+/* ── Deterministic gradient per course title ── */
+const PALETTES = [
+  ["#1c4a2e", "#2d6a4f"],
+  ["#2d6a4f", "#3a7a5a"],
+  ["#3d2b1f", "#7a4030"],
+  ["#1c3a2e", "#4a6a50"],
+  ["#2d3a1e", "#4a5e2a"],
+  ["#3a2a10", "#6a4e1a"],
+  ["#1a3040", "#2d5a6a"],
+  ["#2d1f3a", "#5a3a6a"],
+];
+
+const hashTitle = (str = "") => {
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) >>> 0;
+  return h % PALETTES.length;
+};
+
+const getGradient = (title) => {
+  const [a, b] = PALETTES[hashTitle(title)];
+  return `linear-gradient(135deg, ${a} 0%, ${b} 100%)`;
+};
+
+const getInitials = (title = "") =>
+  title.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join("") || "AI";
+
+
 const MyCoursesPage = () => {
   const { courses = [], loading } = useOutletContext();
   const [searchQuery, setSearchQuery] = useState("");
@@ -51,14 +79,6 @@ const MyCoursesPage = () => {
     if (course.progress > 0) return <FaArrowRight />;
     return <FaPlay />;
   };
-
-  const getFallbackImageText = (title = "AI") =>
-    title
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((word) => word[0]?.toUpperCase())
-      .join("") || "AI";
 
   const filteredCourses = courses.filter((c) =>
     c.title?.toLowerCase().includes(searchQuery.toLowerCase())
@@ -139,14 +159,23 @@ const MyCoursesPage = () => {
               role="button"
               tabIndex={0}
             >
-              <div className="dashboard-course-media">
-                {course.imageUrl ? (
-                  <img src={course.imageUrl} alt={course.title} loading="lazy" />
-                ) : (
-                  <div className="dashboard-course-image-fallback">
-                    {getFallbackImageText(course.title)}
-                  </div>
-                )}
+
+              {/* ── ONLY THIS BLOCK CHANGED ── */}
+              <div
+                className="dashboard-course-media"
+                style={{ background: getGradient(course.title) }}
+              >
+                {/* faint watermark initials */}
+                <span className="cm-watermark" aria-hidden="true">
+                  {getInitials(course.title)}
+                </span>
+
+                {/* scrim + title at bottom */}
+                <div className="cm-scrim">
+                  <p className="cm-title">{course.title}</p>
+                </div>
+
+                {/* status badge — same as before */}
                 <span
                   className={`dashboard-course-status ${
                     course.progress === 100 ? "is-complete" : course.progress > 0 ? "is-active" : ""
@@ -155,6 +184,7 @@ const MyCoursesPage = () => {
                   {getStatusLabel(course.progress)}
                 </span>
               </div>
+              {/* ── END CHANGED BLOCK ── */}
 
               <div className="dashboard-course-body">
                 <div className="dashboard-course-tags" aria-label="Course tags">
