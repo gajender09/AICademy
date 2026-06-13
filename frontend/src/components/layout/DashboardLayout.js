@@ -6,6 +6,7 @@ import {
   FaHome,
   FaLightbulb,
   FaUserCircle,
+  FaLock,
 } from "react-icons/fa";
 
 import "../../styles/DashboardLayout.css";
@@ -14,7 +15,7 @@ const NAV_ITEMS = [
   { to: "/dashboard", label: "Dashboard", icon: <FaHome /> },
   { to: "/my-courses", label: "My Courses", icon: <FaBookOpen /> },
   { to: "/progress", label: "Progress", icon: <FaChartLine /> },
-  { to: "/ai-lab", label: "AI Lab", icon: <FaLightbulb /> },
+  { to: "/ai-lab", label: "AI Lab", icon: <FaLightbulb />, premium: true },
   { to: "/profile", label: "Profile", icon: <FaUserCircle /> },
 ];
 
@@ -63,6 +64,7 @@ const DashboardLayout = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const isProUser = user?.plan === "pro";
 
   const isActive = (path) => {
     if (path === "/dashboard") {
@@ -117,16 +119,16 @@ const DashboardLayout = () => {
 
       await Promise.allSettled([
         safeFetch(`${API_URL}/api/users/me`, (data) => setUser(data.user || data)),
-      
+
         safeFetch(`${API_URL}/api/courses/dashboard`, (data) =>
           setCourses(data.courses || [])
         ),
-      
+
         safeFetch(
           `${API_URL}/api/courses/usage`,
           (data) => setUsage(data)
         ),
-      
+
         safeFetch(
           `${API_URL}/api/courses/activity/summary?year=${currentYear}`,
           (data) => {
@@ -134,11 +136,11 @@ const DashboardLayout = () => {
             if (!year) setSelectedYear(data.year || currentYear);
           }
         ),
-      
+
         safeFetch(`${API_URL}/api/courses/quiz/last`, (data) =>
           setLastQuiz(data)
         ),
-      
+
         safeFetch(`${API_URL}/api/courses/activity/recent`, (data) =>
           setRecentActivity(data.activities || [])
         ),
@@ -201,16 +203,34 @@ const DashboardLayout = () => {
         </div>
 
         <nav className="sidebar-list">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className={`sidebar-item ${isActive(item.to) ? "active" : ""}`}
-            >
-              <span className="sidebar-icon">{item.icon}</span>
-              <span className="sidebar-label">{item.label}</span>
-            </Link>
-          ))}
+          {NAV_ITEMS.map((item) => {
+
+            const locked = item.premium && !isProUser;
+
+            return (
+              <Link
+                key={item.to}
+                to={item.to}
+                className={`sidebar-item ${isActive(item.to) ? "active" : ""
+                  } ${locked ? "locked-feature" : ""}`}
+              >
+
+                <span className="sidebar-icon">
+                  {item.icon}
+                </span>
+
+                <span className="sidebar-label">
+                  {item.label}
+
+                  {locked && (
+                    <FaLock className="lock-icon" />
+                  )}
+                </span>
+
+              </Link>
+            );
+
+          })}
         </nav>
       </aside>
 
@@ -232,16 +252,34 @@ const DashboardLayout = () => {
 
       {/* Mobile Bottom Navigation Bar */}
       <nav className="mobile-bottom-navbar">
-        {NAV_ITEMS.map((item) => (
-          <Link
-            key={item.to}
-            to={item.to}
-            className={`mobile-bottom-nav-item ${isActive(item.to) ? "active" : ""}`}
-          >
-            <span className="mobile-bottom-nav-icon">{item.icon}</span>
-            <span className="mobile-bottom-nav-label">{item.label}</span>
-          </Link>
-        ))}
+        {NAV_ITEMS.map((item) => {
+
+          const locked = item.premium && !isProUser;
+
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={`mobile-bottom-nav-item ${isActive(item.to) ? "active" : ""
+                } ${locked ? "locked-feature" : ""}`}
+            >
+
+              <span className="mobile-bottom-nav-icon">
+                {item.icon}
+              </span>
+
+              <span className="mobile-bottom-nav-label">
+
+                {item.label}
+
+                {locked && <FaLock className="lock-icon" />}
+
+              </span>
+
+            </Link>
+          )
+
+        })}
       </nav>
     </div>
   );
