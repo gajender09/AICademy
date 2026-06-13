@@ -278,7 +278,7 @@ const StudentDashboard = () => {
 
               <button
                 className="upgrade-plan-btn"
-                onClick={() => navigate("/upgrade")}
+                onClick={() => navigate("/pricing")}
               >
                 Upgrade to Pro
               </button>
