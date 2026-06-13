@@ -284,3 +284,18 @@
 [data-theme="dark"] .mobile-bottom-nav-item.active {
   color: var(--forest);
 }
+
+
+.locked-feature {
+  opacity: 0.6;
+}
+
+.lock-icon {
+  margin-left: 6px;
+  font-size: 11px;
+}
+
+
+.locked-feature:hover {
+  opacity: 0.85;
+}
